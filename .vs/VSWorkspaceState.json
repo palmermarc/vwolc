@@ -7,9 +7,10 @@
     "\\src\\assets\\images",
     "\\src\\Components",
     "\\src\\constants",
-    "\\src\\Containers",
-    "\\src\\core"
+    "\\src\\store",
+    "\\src\\_actions",
+    "\\src\\_reducers"
   ],
-  "SelectedNode": "\\src\\constants\\config.js",
+  "SelectedNode": "\\.gitignore",
   "PreviewInSolutionExplorer": false
 }
