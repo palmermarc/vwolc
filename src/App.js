@@ -1,28 +1,66 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Router, Route } from 'react-router-dom'
+import { connect } from 'react-redux';
+import createBrowserHistory from 'history/createBrowserHistory';
+import {withRouter} from "react-router";
+import * as actions from "./_actions/index";
+import {bindActionCreators} from "redux";
+
 import './App.css';
 
+import Sidebar from './Containers/Sidebar';
+import Mobs from './Containers/Mobs';
+import Areas from './Containers/Areas';
+
+const history = createBrowserHistory();
+
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+
+    componentDidMount() {
+
+    }
+
+    render() {
+        return (
+            <div className={"marcopromo-app-container"}>
+                <Router history={history}>
+                    <div id="" className="content">
+                        <Sidebar></Sidebar>
+                        <div id="content_bin">
+                            <Route exact path="/areas/" niceName="Areas" component={Areas} />
+                            <Route exact path="/areas/:areaId/" niceName="Areas" component={Areas} />
+
+                            <Route exact path="/mobs/" niceName="Mobs" component={Mobs} />
+                        </div>
+                    </div>
+                </Router>
+            </div>
+        );
+    }
 }
 
-export default App;
+function mapStateToProps(state) {
+    return state;
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(actions, dispatch)
+    };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
+
+//<Route exact path="/mobs/create" component={MobsCopy} />
+//<Route exact path="/mobs/:copyId/" component={MobsEdit} />
+//<Route exact path="/user/logout/" component={LogoutPage} />
+//<Route exact path="/login/" component={Login} />
+//<Route exact path="/objects/" component={ObjectsList} />
+//<Route exact path="/objects/create/" component={ObjectCreate} />
+//<Route exact path="/objects/edit/:listenerId/" component={ObjectsList} />
+//<Route exact path="/rooms/" component={RoomsList} />
+//<Route exact path="/rooms/create/" component={RoomsCreate} />
+//<Route exact path="/rooms/edit/:listenerId/" component={RoomsList} />
