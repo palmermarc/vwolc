@@ -28,7 +28,24 @@
     #mobs-list .item.active .description {
         color: rgba(255, 255, 255, 0.7);
     }
+#mob-stats .field,
+#mob-stats .field input,
+#mob-stats .field textarea {
+    width: 100%;
+    max-width: 100%;
+}
 
 .field label {
     text-align: left;
+}
+
+#areas-list .list {
+    text-align: left;
+}
+
+#object-stats .field,
+#object-stats .field input,
+#object-stats .field textarea {
+    width: 100%;
+    max-width: 100%;
 }

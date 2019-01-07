@@ -3,25 +3,232 @@ import {bindActionCreators } from 'redux';
 import * as actions from '../_actions/actions.areas';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Grid } from 'semantic-ui-react';
-import AreasList from '../Components/AreasList';
-import AreasEdit from '../Components/AreasEdit';
+import { Link } from 'react-router-dom';
+import { Segment, Divider, Grid, Form, Message, List, Button, Icon } from 'semantic-ui-react';
+import config from '../constants/config';
+
 
 class Areas extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.config = config;
+        this.handleChange = this.handleChange.bind(this);
+        this.getAreas = this.getAreas.bind(this);
+        this.state = {
+            errors: [],
+            niceName: "Create Area",
+            areaId: 0,
+            name: "",
+            created_by: "",
+            areas: [{
+                name: "My First Area",
+                created_by: "Your Name Here",
+                id: 0
+            }],
+            area: { 
+                name: "", 
+                created_by: "", 
+                id: 0
+            }
+        }
+    }
+
+    getAreas() {
+        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        let self = this;
+        let savedAreas = [];
+        db.transaction(function(tx){
+            tx.executeSql("SELECT * FROM areas LIMIT 10000", [], function(tx, rs) {
+                console.log(rs.rows);
+                if( rs.rows.length >= 1 ) {
+                    for( var i=0; i<rs.rows.length; i++ ) {
+                        console.log(rs.rows[i]);
+                        savedAreas.push({
+                            id: rs.rows[i].id,
+                            name: rs.rows[i].name,
+                            created_by: rs.rows[i].created_by
+                        });
+                    }
+                } else {
+                    savedAreas = [{
+                        id: 0,
+                        name: "My First Area",
+                        created_by: "Your Name Here"
+                    }]
+                }
+                self.setState({areas: savedAreas});
+            })
+        });        
+    }
+
+    componentDidMount(nextProps) {
+        this.getAreas();
+
+        if( typeof this.props.match.params.areaId !== "undefined" ) {
+            this.setState({ areaId: this.props.match.params.areaId, niceName: "Update Area" });
+            this.getArea(this.props.match.params.areaId);
+            console.log("Looking for new stuff");
+        }
+
+        document.title = this.state.niceName;
+    }
+
+    componentWillReceiveProps () {
+        this.getAreas();
+        console.log("Will Recieve Fired");
+
+        if( typeof this.props.match.params.areaId !== "undefined" ) {
+            this.setState({ areaId: this.props.match.params.areaId, niceName: "Update Area" });
+            this.getArea(this.props.match.params.areaId);
+        }
+
+        document.title = this.state.niceName;
+    }
+
+    getArea( areaId ) {
+        let self = this;
+        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        db.transaction(function(tx){
+            
+            tx.executeSql("SELECT * FROM areas WHERE id = '" + areaId + "'", [], function(tx, rs) {
+                if( rs.rows.length ) {
+                    self.setState({ 
+                        area: {
+                            id: rs.rows[0].id,
+                            name: rs.rows[0].name,
+                            created_by: rs.rows[0].created_by
+                        }
+                    });
+                }
+            }, function(error) {
+                console.log(error);
+            });
+        });
+    }
+
+    handleChange(e) {
+        const { name, value } = e.target;
+
+        this.setState(
+            prevState => ({
+                area: {
+                    ...prevState.area,
+                    [name]: value
+                }
+            })    
+        );
+    }
+
+    handleSubmit = () => {
+        let self = this;
+        if( this.state.area.name === "") {
+            this.setState({ errors: [{field: "name", message: "You must provide an area name."}] });
+        }
+
+        if( this.state.area.created_by === "") {
+            this.setState({ errors: [{field: "created_by", message: "You need to provide a name so we can credit the right person."}] });
+        }
+
+        // Don't save anything if there are errors
+        if( this.state.errors.length > 0 )
+            return false;
+
+        if( this.state.areaId === 0 ) {
+            var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+
+            db.transaction(function (tx) {
+                tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.name, self.state.created_by], function(tx, res){
+                    self.props.history.push("/areas/"+res.insertId+"/");
+                }, function(ts, error) {
+                    console.log(error);
+                });
+            });
+        }
+        else 
+            this.updateArea();
+    }
+
+    createArea() {
+        let self = this;
+        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        db.transaction(function (tx) {
+            tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
+                
+            }, function(ts, error) {
+                console.log(error);
+            });
+        });
+    }
+
+    updateArea() {
+        let self = this;
+        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        db.transaction(function (tx) {
+            tx.executeSql("UPDATE areas SET name = ?, created_by = ? WHERE rowid = ?", [self.state.area.name, self.state.area.created_by, self.state.areaId], function(tx, res){
+                self.props.history.push("/areas/"+self.state.areaId+"/");
+            }, function(ts, error) {
+                console.log(error);
+            });
+        });
+    }
+    
+    setNewActiveArea(areaId) {
+        localStorage.setItem('selectedArea', areaId);
+    }
 
     render() {
         return (
             <div className="wrap fade-in">
-                <Grid columns={2} stackable textAlign='center'>
-                    <Grid.Row verticalAlign='top'>
-                        <Grid.Column>
-                            <AreasList />
-                        </Grid.Column>
-                        <Grid.Column>
-                            <AreasEdit />
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
+                <Segment placeholder>
+                    <Grid columns={2} stackable textAlign='center'>
+                        <Divider vertical></Divider>
+                        <Grid.Row verticalAlign='top'>
+                            <Grid.Column>
+                                <div id="areas-list" className="fade-in">
+                                    <List divided relaxed>
+                                        {this.state.areas.map((area) => (
+                                            <List.Item key={"area-"+area.id}>
+                                                <List.Content>
+                                                    <List.Header>
+                                                        <Link to={"/areas/" + area.id + "/"} onClick={() => this.setNewActiveArea(area.id)}>
+                                                            ({area.id}) {area.name}
+                                                        </Link>
+                                                    </List.Header>
+                                                    <List.Description>{area.created_by}</List.Description>
+                                                </List.Content>
+                                            </List.Item>
+                                        ))}
+                                    </List>
+                                    <div id="view-header-section">
+                                        <Button as={Link} to={'/areas/create'} className="view-create-new">
+                                            <Icon name="plus" />
+                                            Create New
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <div id="mob-stats" className="fade-in">
+                                    {this.state.errors.length > 0  &&
+                                        <Message negative>
+                                            <Message.Header>Please fix the following errors:</Message.Header>
+                                            {this.state.errors.map((error) => (
+                                                <p>{error.message}</p>
+                                            ))}
+                                        </Message>
+                                    }
+                                    <Form onSubmit={this.handleSubmit}>
+                                        <Form.Group widths='equal'>
+                                            <Form.Input fluid name="name" label='Area Name' placeholder='Area Name Here' value={this.state.area.name} onChange={this.handleChange} />
+                                            <Form.Input fluid name="created_by" label='Created By' placeholder='Your Name Here' value={this.state.area.created_by} onChange={this.handleChange} />
+                                        </Form.Group>
+                                        <Form.Button content={this.state.niceName} />
+                                    </Form>
+                                </div>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </Segment>
             </div>
         );
     }

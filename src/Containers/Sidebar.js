@@ -8,10 +8,14 @@ class Sidebar extends Component {
 
     constructor(props, context) {
         super(props, context);
+        
+        var selectedArea = localStorage.getItem('selectedArea');
+        if (selectedArea === null) { selectedArea = 0; }
+
         this.state = {
             opened: true,
+            selectedArea: selectedArea
         };
-
     }
 
     render() {
@@ -22,9 +26,13 @@ class Sidebar extends Component {
                     <nav>
                         <Menu text vertical>
                             <Menu.Item as={Link} to='/areas/'>Areas</Menu.Item>
+                            {this.state.selectedArea !== 0 && 
+                            <span>
                             <Menu.Item as={Link} to='/rooms/'>Rooms</Menu.Item>
                             <Menu.Item as={Link} to='/mobs/'>Mobs</Menu.Item>
                             <Menu.Item as={Link} to='/objects/'>Objects</Menu.Item>
+                            </span>
+                            }
                         </Menu>
                     </nav>
                 </header>

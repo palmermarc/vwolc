@@ -7,10 +7,10 @@
     "\\src\\assets\\images",
     "\\src\\Components",
     "\\src\\constants",
-    "\\src\\store",
-    "\\src\\_actions",
-    "\\src\\_reducers"
+    "\\src\\Containers",
+    "\\src\\core",
+    "\\src\\store"
   ],
-  "SelectedNode": "\\.gitignore",
+  "SelectedNode": "\\src\\Components\\MobsEdit.js",
   "PreviewInSolutionExplorer": false
 }
