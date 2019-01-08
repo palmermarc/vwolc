@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Grid, Button, List, Icon, Segment, Divider, Form, Message, Dropdown } from 'semantic-ui-react';
+import { Grid, Button, List, Popup, Icon, Label, Input, Segment, Divider, Form, Message, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import config from '../constants/config';
 const isNumber = require('is-number');
@@ -292,9 +292,9 @@ class Mobs extends React.Component {
                         <Grid.Row verticalAlign='top'>
                             <Grid.Column>
                                 <div id="mobs-list" className="fade-in">
-                                    {this.state.mobs.map((mob) => (
-                                        <List key={mob.vnum} divided relaxed>
-                                            <List.Item>
+                                    <List divided relaxed>
+                                        {this.state.mobs.map((mob) => (
+                                            <List.Item key={mob.vnum}>
                                                 <List.Content>
                                                     <List.Header>
                                                         <Link to={"/mobs/"+mob.vnum+"/"}>({mob.vnum}) {mob.name}</Link>
@@ -302,8 +302,8 @@ class Mobs extends React.Component {
                                                     <List.Description>{mob.short_description}</List.Description>
                                                 </List.Content>
                                             </List.Item>
-                                        </List>
-                                    ))}
+                                        ))}
+                                    </List>
                                     <div id="view-header-section">
                                         <Button as={Link} to={'/mobs/create'} className="view-create-new">
                                             <Icon name="plus" />
@@ -324,7 +324,10 @@ class Mobs extends React.Component {
                                     }
                                     <Form onSubmit={this.handleSubmit}>
                                         <Form.Group widths='equal'>
-                                            <Form.Input fluid name="name" label='Name' value={this.state.mob.name} placeholder='name' onChange={this.handleChange} />
+                                            <Form.Field>
+                                                <label>Namelist <Popup trigger={<Button icon='help circle' />} content='This is the list of names that your mob can be found under' /></label>
+                                                <Input name="name"  value={this.state.mob.name} placeholder='name' onChange={this.handleChange} />
+                                            </Form.Field>
                                             <Form.Input fluid name="short_description" value={this.state.mob.short_description} label='Short Desc' placeholder='Short desc' onChange={this.handleChange} />
                                         </Form.Group>
                                         <Form.Input fluid name="long_description" label='Long Desc' placeholder='' value={this.state.mob.long_description} onChange={this.handleChange} />

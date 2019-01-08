@@ -8,26 +8,6 @@
     overflow-y: scroll;
 }
 
-#mobs-list .item {
-    border: 1px solid #000;
-    border-radius: 10px;
-    margin: 1em 0;
-    padding: 0.5em 0 0.5em 2em;
-    text-align: left;
-}
-#mobs-list .item:hover,
-#mobs-list .item.active {
-    background-color: #000;
-    color: #fff;
-}
-#mobs-list .item:hover .header,
-#mobs-list .item.active .header {
-    color: #fff;
-}
-    #mobs-list .item:hover .description,
-    #mobs-list .item.active .description {
-        color: rgba(255, 255, 255, 0.7);
-    }
 #mob-stats .field,
 #mob-stats .field input,
 #mob-stats .field textarea {
@@ -39,7 +19,8 @@
     text-align: left;
 }
 
-#areas-list .list {
+#areas-list .list,
+#mobs-list .list {
     text-align: left;
 }
 
@@ -48,4 +29,11 @@
 #object-stats .field textarea {
     width: 100%;
     max-width: 100%;
+}
+
+.field label button.ui.icon.button {
+    padding: 0;
+    display: inline;
+    background: transparent;
+    color: rgba(0,0,0,.87);
 }
