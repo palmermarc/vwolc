@@ -6,5 +6,5 @@ export default {
             firstName: null,
             lastName: null
     }, 
-    area : 0
+    selectedArea : 0
 };

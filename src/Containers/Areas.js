@@ -18,8 +18,6 @@ class Areas extends React.Component {
             errors: [],
             niceName: "Create Area",
             areaId: 0,
-            name: "",
-            created_by: "",
             areas: [{
                 name: "My First Area",
                 created_by: "Your Name Here",
@@ -137,7 +135,7 @@ class Areas extends React.Component {
             var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
 
             db.transaction(function (tx) {
-                tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.name, self.state.created_by], function(tx, res){
+                tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
                     self.props.history.push("/areas/"+res.insertId+"/");
                 }, function(ts, error) {
                     console.log(error);
@@ -174,10 +172,11 @@ class Areas extends React.Component {
     }
     
     setNewActiveArea(areaId) {
-        localStorage.setItem('selectedArea', areaId);
+        this.props.actions.setNewActiveArea(areaId);
     }
 
     render() {
+        console.log(this.state);
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
