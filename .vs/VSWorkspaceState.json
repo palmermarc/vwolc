@@ -1,16 +1,16 @@
 {
   "ExpandedNodes": [
     "",
+    "\\public",
     "\\src",
     "\\src\\assets",
     "\\src\\assets\\css",
     "\\src\\assets\\images",
-    "\\src\\Components",
     "\\src\\constants",
     "\\src\\Containers",
     "\\src\\core",
     "\\src\\store"
   ],
-  "SelectedNode": "\\src\\Components\\MobsEdit.js",
+  "SelectedNode": "\\src\\Containers\\Areas.js",
   "PreviewInSolutionExplorer": false
 }

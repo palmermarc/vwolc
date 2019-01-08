@@ -152,8 +152,9 @@ class Areas extends React.Component {
         let self = this;
         var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
         db.transaction(function (tx) {
-            tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
-                
+            tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, rs){
+                self.getAreas();
+                self.props.history.push("/areas/"+rs.insertId+"/");
             }, function(ts, error) {
                 console.log(error);
             });
@@ -165,7 +166,7 @@ class Areas extends React.Component {
         var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
         db.transaction(function (tx) {
             tx.executeSql("UPDATE areas SET name = ?, created_by = ? WHERE rowid = ?", [self.state.area.name, self.state.area.created_by, self.state.areaId], function(tx, res){
-                self.props.history.push("/areas/"+self.state.areaId+"/");
+                self.getAreas();
             }, function(ts, error) {
                 console.log(error);
             });

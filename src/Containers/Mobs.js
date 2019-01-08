@@ -4,6 +4,8 @@ import { withRouter } from 'react-router';
 import { Grid, Button, List, Icon, Segment, Divider, Form, Message, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import config from '../constants/config';
+const isNumber = require('is-number');
+
 
 class Mobs extends React.Component {
 
@@ -106,6 +108,21 @@ class Mobs extends React.Component {
 
     handleChange(e) {
         const { name, value } = e.target;
+
+        if( ( 
+            name === "level" || 
+            name === "exp_level" || 
+            name === "alignment" || 
+            name === "hitroll" || 
+            name === "damroll" || 
+            name === "ac" ||
+            name === "hp" ||
+            name === "gold" ||
+            name === "sex"
+            )
+            && !isNumber(value)) {
+                return;
+            }
         this.setState(
             prevState => ({
                 mob: {
@@ -254,10 +271,19 @@ class Mobs extends React.Component {
     }
 
     updateMob() {
-
+        let self = this;
+        console.log("Trying to update");
+        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        db.transaction(function(tx){
+            tx.executeSql("UPDATE MOBS set name = ?, short_description = ?, long_description = ?, description = ?, act = ?, affected_by = ?,  alignment = ?, level = ?, exp_level = ?, hitroll = ?, damroll = ?, ac = ?, hp = ?, gold = ?, sex = ? WHERE id = ?", [self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, self.state.mob.affected_by, self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.state.mobId], function(tx, rs) {
+                self.getMobs();
+            }, function(error) {
+                console.log(error);
+            });
+        });
     }
 
-    render() {
+    render( ) {
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
