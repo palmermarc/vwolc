@@ -2,7 +2,7 @@ import initialState from '../store/InitialState';
 
 export function areas( state = initialState, action ) {
     let newState = Object.assign({}, state);
-    console.log(action);
+
     switch( action.type ) {
         case 'areas':
             newState.areas = action.areas;

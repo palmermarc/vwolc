@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { Menu, Image } from 'semantic-ui-react'
 import { Link } from 'react-router-dom';
 import Logo from '../assets/images/Logo.svg';
@@ -14,8 +16,9 @@ class Sidebar extends Component {
 
         this.state = {
             opened: true,
-            selectedArea: selectedArea
         };
+
+        console.log(this.props);
     }
 
     render() {
@@ -26,7 +29,7 @@ class Sidebar extends Component {
                     <nav>
                         <Menu text vertical>
                             <Menu.Item as={Link} to='/areas/'>Areas</Menu.Item>
-                            {this.state.selectedArea !== 0 && 
+                            {this.props.areas.activeArea !== 0 && 
                             <span>
                             <Menu.Item as={Link} to='/rooms/'>Rooms</Menu.Item>
                             <Menu.Item as={Link} to='/mobs/'>Mobs</Menu.Item>
@@ -41,4 +44,15 @@ class Sidebar extends Component {
     }
 }
 
-export default Sidebar;
+function mapStateToProps(state) {
+    return state;
+}
+
+function mapDispatchToProps(dispatch) {
+    return {};
+}
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Sidebar));

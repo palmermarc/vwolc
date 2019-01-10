@@ -37,10 +37,8 @@ class Areas extends React.Component {
         let savedAreas = [];
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM areas LIMIT 10000", [], function(tx, rs) {
-                console.log(rs.rows);
                 if( rs.rows.length >= 1 ) {
                     for( var i=0; i<rs.rows.length; i++ ) {
-                        console.log(rs.rows[i]);
                         savedAreas.push({
                             id: rs.rows[i].id,
                             name: rs.rows[i].name,
@@ -149,8 +147,6 @@ class Areas extends React.Component {
         var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
         db.transaction(function (tx) {
             tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, rs){
-                console.log(tx);
-                console.log(rs);
                 setTimeout(function() {
                     self.getAreas();
                     self.props.history.push("/areas/"+rs.insertId+"/");
@@ -178,7 +174,6 @@ class Areas extends React.Component {
     }
 
     render() {
-        console.log(this.state.area);
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
