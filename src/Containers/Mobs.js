@@ -337,7 +337,7 @@ class Mobs extends React.Component {
                                         ))}
                                     </List>
                                     <div id="view-header-section">
-                                        <Button as={Link} to={'/mobs/create'} className="view-create-new">
+                                        <Button as={Link} to={'/mobs/'} className="view-create-new">
                                             <Icon name="plus" />
                                             Create New
                                         </Button>
