@@ -34,6 +34,7 @@ class App extends Component {
                             <Route exact path="/mobs/" niceName="Mobs" component={Mobs} />
                             <Route exact path="/mobs/:mobId/" niceName="Edit Mob" component={Mobs} />
                             <Route exact path="/objects/" nameName="Create Object" component={Objects} />
+                            <Route exact path="/objects/:objectId/" nameName="Update Object" component={Objects} />
                         </div>
                     </div>
                 </Router>
