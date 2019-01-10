@@ -6,17 +6,13 @@ import { Link } from 'react-router-dom';
 import config from '../constants/config';
 const isNumber = require('is-number');
 
-
 class Mobs extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        
-        var selectedArea = localStorage.getItem('selectedArea');
-        if (selectedArea === null) { selectedArea = 0; }
+        this.config = config;
 
         this.state = {
-            selectedArea: selectedArea,
             errors: [],
             mobId: 0,
             niceName: "Create Mob",
@@ -78,9 +74,10 @@ class Mobs extends React.Component {
         // Call API
         this.getMobs();
 
-        if( typeof this.props.match.params.areaId !== "undefined" ) {
+        if( typeof this.props.match.params.mobId !== "undefined" ) {
             this.setState({ mobId: this.props.match.params.mobId, niceName: "Update Mob" });
-            this.getMob(this.props.match.params.mobId);        }
+            this.getMob(this.props.match.params.mobId);
+        }
 
         document.title = this.state.niceName;
     }
@@ -89,7 +86,7 @@ class Mobs extends React.Component {
         // Call API
         this.getMobs();
 
-        if( typeof this.props.match.params.areaId !== "undefined" ) {
+        if( typeof this.props.match.params.mobId !== "undefined" ) {
             this.setState({ mobId: this.props.match.params.mobId, niceName: "Update Mob" });
             this.getMob(this.props.match.params.mobId);
         }
@@ -98,12 +95,44 @@ class Mobs extends React.Component {
     }
 
     getMobs() {
-        let mobsJson = localStorage.getItem('mobs');
-        if( mobsJson != null ) {
-            this.setState({
-                mobs: JSON.parse(mobsJson) || this.state.mobs
+        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        let self = this;
+        let Mobs = [];
+        db.transaction(function(tx){
+            tx.executeSql("SELECT * FROM mobs WHERE area_id = ? LIMIT 10000", [self.props.areas.activeArea], function(tx, rs) {
+                if( rs.rows.length >= 1 ) {
+                    for( var i=0; i<rs.rows.length; i++ ) {
+                        Mobs.push({
+                            id: rs.rows[i].id,
+                            vnum : rs.rows[i].vnum,
+                            name : rs.rows[i].name,
+                            short_description : rs.rows[i].short_description,
+                            long_description : rs.rows[i].long_description,
+                            description : rs.rows[i].description,
+                            act : rs.rows[i].act,
+                            affected_by : rs.rows[i].affected_by,
+                            alignment : rs.rows[i].alignment,
+                            level : rs.rows[i].level,
+                            exp_level : rs.rows[i].exp_level,
+                            hitroll : rs.rows[i].hitroll,
+                            damroll : rs.rows[i].damroll,
+                            ac : rs.rows[i].ac,
+                            hp : rs.rows[i].hp,
+                            gold : rs.rows[i].gold,
+                            sex : rs.rows[i].sex
+                        });
+                    }
+                } else {
+                    Mobs = [{
+                        id : 0,
+                        name : "first mob areaname",
+                        short_description : "my first mob",
+                        long_description : "This is my first mob. Ain't it perty?",
+                    }]
+                }
+                self.setState({mobs: Mobs});
             })
-        }
+        }); 
     }
 
     handleChange(e) {
@@ -159,7 +188,9 @@ class Mobs extends React.Component {
 
         var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
         db.transaction(function(tx){
-            tx.executeSql("SELECT * FROM mobs WHERE area_id = '" + self.state.selectedArea + "' AND vnum = '" + mobId + "'", [], function(tx, rs) {
+            tx.executeSql("SELECT * FROM mobs WHERE area_id = '" + self.props.areas.activeArea + "' AND id = '" + mobId + "'", [], function(tx, rs) {
+                console.log(rs);
+                console.log(tx);
                 if( rs.rows.length ) {
                     mob = rs.rows[0];
                     self.setState({mob: mob});
@@ -262,7 +293,7 @@ class Mobs extends React.Component {
         console.log("Trying to save");
         var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
         db.transaction(function(tx){
-            tx.executeSql("INSERT INTO mobs (vnum, name, short_description, long_description, description, act, affected_by, alignment, level, exp_level, hitroll, damroll, ac, hp, gold, sex, area_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.state.mob.vnum, self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, self.state.mob.affected_by, self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.state.selectedArea], function(tx, rs) {
+            tx.executeSql("INSERT INTO mobs (vnum, name, short_description, long_description, description, act, affected_by, alignment, level, exp_level, hitroll, damroll, ac, hp, gold, sex, area_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.state.mob.vnum, self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, self.state.mob.affected_by, self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.props.areas.activeArea], function(tx, rs) {
                 self.props.history.push("/mobs/"+rs.insertId+"/");
             }, function(error) {
                 console.log(error);
@@ -284,6 +315,7 @@ class Mobs extends React.Component {
     }
 
     render( ) {
+        console.log(this.props.areas);
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
@@ -297,7 +329,7 @@ class Mobs extends React.Component {
                                             <List.Item key={"mob" + mob.id}>
                                                 <List.Content>
                                                     <List.Header>
-                                                        <Link to={"/mobs/"+mob.vnum+"/"}>({mob.vnum}) {mob.name}</Link>
+                                                        <Link to={"/mobs/" + mob.id + "/"}>({mob.id}) {mob.name}</Link>
                                                     </List.Header>
                                                     <List.Description>{mob.short_description}</List.Description>
                                                 </List.Content>
@@ -346,11 +378,10 @@ class Mobs extends React.Component {
                                             <Form.Input fluid name="ac" label='Armor' placeholder='0' value={this.state.mob.ac} onChange={this.handleChange}  />
                                         </Form.Group>
                                         <Form.Group widths="equal">
-                                            <Dropdown label='Affects'placeholder='Affects' name="affected_by" fluid multiple selection options={this.state.affects} />
+                                            <Dropdown label='Affects'   placeholder='Affects' name="affected_by" fluid multiple selection options={this.state.affects} />
                                         </Form.Group>
                                         <Form.Button content={this.state.niceName} />
                                     </Form>
-			
                                 </div>
                             </Grid.Column>
                         </Grid.Row>
@@ -362,14 +393,9 @@ class Mobs extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return {};
-}
-
-function mapDispatchToProps(dispatch) {
-    return {};
+    return state;
 }
 
 export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )(Mobs));

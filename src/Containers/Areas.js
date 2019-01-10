@@ -158,7 +158,7 @@ class Areas extends React.Component {
         });
     }
     
-    setNewActiveArea = (areaId) => this.props.actions.setActiveArea(areaId);
+    setNewActiveArea = () => this.props.actions.setActiveArea(this.state.areaId);
 
     render() {
         return (
@@ -222,7 +222,7 @@ class Areas extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return state;
 }
 
 function mapDispatchToProps(dispatch) {
