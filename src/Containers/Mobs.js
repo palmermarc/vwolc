@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Grid, Button, List, Popup, Icon, Label, Input, Segment, Divider, Form, Message, Dropdown } from 'semantic-ui-react';
+import { Grid, Button, List, Popup, Icon, Input, Segment, Divider, Form, Message, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import config from '../constants/config';
 const isNumber = require('is-number');
@@ -294,7 +294,7 @@ class Mobs extends React.Component {
                                 <div id="mobs-list" className="fade-in">
                                     <List divided relaxed>
                                         {this.state.mobs.map((mob) => (
-                                            <List.Item key={mob.vnum}>
+                                            <List.Item key={"mob" + mob.id}>
                                                 <List.Content>
                                                     <List.Header>
                                                         <Link to={"/mobs/"+mob.vnum+"/"}>({mob.vnum}) {mob.name}</Link>

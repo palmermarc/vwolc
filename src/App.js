@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 import createBrowserHistory from 'history/createBrowserHistory';
-import {withRouter} from "react-router";
+//import {withRouter} from "react-router";
 import * as actions from "./_actions/index";
 import {bindActionCreators} from "redux";
 import './App.css';

@@ -11,6 +11,7 @@ function setNewActiveArea(areaId) {
 
 export function setActiveArea(areaId) {
     return (dispatch) => {
-        dispatch( setNewActiveArea( areaId ) )
+        dispatch( setNewActiveArea( areaId ) );
+        history.push('/areas/' + areaId + '/');
     }
 }

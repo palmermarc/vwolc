@@ -1,61 +1,9 @@
-/*
- * flagship.js
- * Main MarcoPromo frontend class to manage core functionality
- */
-
 import config from '../constants/config';
-import store from '../store/store';
-import React from 'react'
-import { browserHistory } from 'react-router'
-import { Router, Route } from 'react-router-dom'
-import { connect } from 'react-redux';
-import createBrowserHistory from 'history/createBrowserHistory';
-const history = createBrowserHistory();
 
 class OLC {
 
     constructor() {
         this.config = config;
-    }
-
-    
-
-    getArea( areaId ) {
-        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
-        
-        db.transaction(function(tx){
-            
-            tx.executeSql("SELECT * FROM areas WHERE rowid = '" + areaId + "'", [], function(tx, rs) {
-                console.log(rs);
-                return;
-
-                return {
-                    id: rs.rows[0].rowid,
-                    name: rs.rows[0].name,
-                    created_by: rs.rows[0].created_by
-                };
-            })
-        });
-
-    }
-
-    createArea( areaName, areaCreatedBy ) {
-        
-    }
-
-    event(action, data = '', target = null, user = null) {
-
-        //this.log(action, data, target, user);
-        this.sendMail(action, data, target, user);
-    }
-
-    error(message, target, user) {
-        this.log("error", message, target, user);
-    }
-
-
-    redirect(path) {
-        //browserHistory.push(path);
     }
 
     createDatabases() {
