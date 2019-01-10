@@ -186,9 +186,9 @@ class Areas extends React.Component {
                                         {this.state.areas.map((area) => (
                                             <List.Item key={"area-"+area.id}>
                                                 <List.Content>
-                                                    <List.Header onClick={() => this.setNewActiveArea(area.id)}>
-                                                        ({area.id}) {area.name}
-                                                    </List.Header>
+                                                    <Link to={"/areas/" + area.id + "/"}>
+                                                        <List.Header>({area.id}) {area.name}</List.Header>
+                                                    </Link>
                                                     <List.Description>{area.created_by}</List.Description>
                                                 </List.Content>
                                             </List.Item>
@@ -212,12 +212,17 @@ class Areas extends React.Component {
                                             ))}
                                         </Message>
                                     }
-                                    <Form onSubmit={this.handleSubmit}>
+                                    <Form>
                                         <Form.Group widths='equal'>
                                             <Form.Input fluid name="name" label='Area Name' placeholder='Area Name Here' value={this.state.area.name} onChange={this.handleChange} />
                                             <Form.Input fluid name="created_by" label='Created By' placeholder='Your Name Here' value={this.state.area.created_by} onChange={this.handleChange} />
                                         </Form.Group>
-                                        <Form.Button content={this.state.niceName} />
+                                        <Form.Group widths="equal">
+                                            <Form.Button onClick={this.handleSubmit} color="black" content={this.state.niceName} />
+                                            {this.state.areaId !== 0 &&
+                                                 <Form.Button color="green" onClick={this.setNewActiveArea}>Open {this.state.area.name} for Building</Form.Button>
+                                            }
+                                        </Form.Group>
                                     </Form>
                                 </div>
                             </Grid.Column>
