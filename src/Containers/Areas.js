@@ -114,7 +114,6 @@ class Areas extends React.Component {
     }
 
     handleSubmit = () => {
-        let self = this;
         if( this.state.area.name === "") {
             this.setState({ errors: [{field: "name", message: "You must provide an area name."}] });
         }
@@ -128,15 +127,7 @@ class Areas extends React.Component {
             return false;
 
         if( this.state.areaId === 0 ) {
-            var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
-
-            db.transaction(function (tx) {
-                tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
-                    self.props.history.push("/areas/"+res.insertId+"/");
-                }, function(ts, error) {
-                    console.log(error);
-                });
-            });
+            this.createArea();
         }
         else 
             this.updateArea();
@@ -144,13 +135,11 @@ class Areas extends React.Component {
 
     createArea() {
         let self = this;
-        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+
         db.transaction(function (tx) {
-            tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, rs){
-                setTimeout(function() {
-                    self.getAreas();
-                    self.props.history.push("/areas/"+rs.insertId+"/");
-                }, 750);
+            tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
+                self.props.history.push("/areas/"+res.insertId+"/");
             }, function(ts, error) {
                 console.log(error);
             });
@@ -169,9 +158,7 @@ class Areas extends React.Component {
         });
     }
     
-    setNewActiveArea(areaId) {
-        this.props.actions.setActiveArea(areaId);
-    }
+    setNewActiveArea = (areaId) => this.props.actions.setActiveArea(areaId);
 
     render() {
         return (
