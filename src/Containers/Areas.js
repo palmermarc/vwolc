@@ -65,7 +65,6 @@ class Areas extends React.Component {
         if( typeof this.props.match.params.areaId !== "undefined" ) {
             this.setState({ areaId: this.props.match.params.areaId, niceName: "Update Area" });
             this.getArea(this.props.match.params.areaId);
-            console.log("Looking for new stuff");
         }
 
         document.title = this.state.niceName;
@@ -73,7 +72,6 @@ class Areas extends React.Component {
 
     componentWillReceiveProps () {
         this.getAreas();
-        console.log("Will Recieve Fired");
 
         if( typeof this.props.match.params.areaId !== "undefined" ) {
             this.setState({ areaId: this.props.match.params.areaId, niceName: "Update Area" });
@@ -135,7 +133,7 @@ class Areas extends React.Component {
             var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
 
             db.transaction(function (tx) {
-                tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.name, self.state.created_by], function(tx, res){
+                tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
                     self.props.history.push("/areas/"+res.insertId+"/");
                 }, function(ts, error) {
                     console.log(error);
@@ -151,8 +149,12 @@ class Areas extends React.Component {
         var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
         db.transaction(function (tx) {
             tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, rs){
-                self.getAreas();
-                self.props.history.push("/areas/"+rs.insertId+"/");
+                console.log(tx);
+                console.log(rs);
+                setTimeout(function() {
+                    self.getAreas();
+                    self.props.history.push("/areas/"+rs.insertId+"/");
+                }, 750);
             }, function(ts, error) {
                 console.log(error);
             });
@@ -172,11 +174,11 @@ class Areas extends React.Component {
     }
     
     setNewActiveArea(areaId) {
-        this.props.actions.setNewActiveArea(areaId);
+        this.props.actions.setActiveArea(areaId);
     }
 
     render() {
-        console.log(this.state);
+        console.log(this.state.area);
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
@@ -189,10 +191,8 @@ class Areas extends React.Component {
                                         {this.state.areas.map((area) => (
                                             <List.Item key={"area-"+area.id}>
                                                 <List.Content>
-                                                    <List.Header>
-                                                        <Link to={"/areas/" + area.id + "/"} onClick={() => this.setNewActiveArea(area.id)}>
-                                                            ({area.id}) {area.name}
-                                                        </Link>
+                                                    <List.Header onClick={() => this.setNewActiveArea(area.id)}>
+                                                        ({area.id}) {area.name}
                                                     </List.Header>
                                                     <List.Description>{area.created_by}</List.Description>
                                                 </List.Content>
