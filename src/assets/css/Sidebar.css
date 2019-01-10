@@ -14,7 +14,7 @@ header {
     width: 150px;
 }
 
-    .App-header img.ui.image {
+    .App-header > a {
         height: auto;
         position: absolute;
         top: 10px;

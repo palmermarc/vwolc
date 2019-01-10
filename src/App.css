@@ -37,3 +37,8 @@
     background: transparent;
     color: rgba(0,0,0,.87);
 }
+#dashboard p {
+    margin: 0 auto;
+    max-width: 900px;
+    text-align: center;
+}

@@ -10,6 +10,7 @@ import Sidebar from './Containers/Sidebar';
 import Mobs from './Containers/Mobs';
 import Areas from './Containers/Areas';
 import Objects from './Containers/Objects';
+import Dashboard from './Containers/Dashboard';
 import OLC from './core/OLC';
 
 const history = createBrowserHistory();
@@ -29,6 +30,7 @@ class App extends Component {
                     <div id="" className="content">
                         <Sidebar></Sidebar>
                         <div id="content_bin">
+                            <Route exact path="/" niceName="Welcome" component={Dashboard} />
                             <Route exact path="/areas/" niceName="Areas" component={Areas} />
                             <Route exact path="/areas/:areaId/" niceName="Areas" component={Areas} />
                             <Route exact path="/mobs/" niceName="Mobs" component={Mobs} />

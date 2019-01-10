@@ -25,7 +25,9 @@ class Sidebar extends Component {
         return (
             <div className="Sidebar">
                 <header className="App-header">
-                    <Image src={Logo} alt="The Death of Cain: Online Area Builder" title="The Death of Cain: Online Area Builder" />
+                    <Link to="/">
+                        <Image src={Logo} alt="The Death of Cain: Online Area Builder" title="The Death of Cain: Online Area Builder" />
+                    </Link>
                     <nav>
                         <Menu text vertical>
                             <Menu.Item as={Link} to='/areas/'>Areas</Menu.Item>

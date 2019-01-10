@@ -182,7 +182,7 @@ class Areas extends React.Component {
                                         ))}
                                     </List>
                                     <div id="view-header-section">
-                                        <Button as={Link} to={'/areas/create'} className="view-create-new">
+                                        <Button as={Link} to={'/areas/'} className="view-create-new">
                                             <Icon name="plus" />
                                             Create New
                                         </Button>

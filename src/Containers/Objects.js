@@ -307,7 +307,7 @@ class Objects extends React.Component {
                                         </List>
                                     ))}
                                     <div id="view-header-section">
-                                        <Button as={Link} to={'/objects/create'} className="view-create-new">
+                                        <Button as={Link} to={'/objects/'} className="view-create-new">
                                             <Icon name="plus" />
                                             Create New
                                         </Button>
