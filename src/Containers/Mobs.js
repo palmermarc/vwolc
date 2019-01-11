@@ -99,6 +99,7 @@ class Mobs extends React.Component {
         var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
         let self = this;
         let Mobs = [];
+
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM mobs WHERE area_id = ? LIMIT 10000", [self.props.areas.activeArea], function(tx, rs) {
                 if( rs.rows.length >= 1 ) {

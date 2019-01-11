@@ -11,6 +11,8 @@ import Mobs from './Containers/Mobs';
 import Areas from './Containers/Areas';
 import Objects from './Containers/Objects';
 import Dashboard from './Containers/Dashboard';
+import Rooms from './Containers/Rooms';
+
 import OLC from './core/OLC';
 
 const history = createBrowserHistory();
@@ -37,6 +39,8 @@ class App extends Component {
                             <Route exact path="/mobs/:mobId/" niceName="Edit Mob" component={Mobs} />
                             <Route exact path="/objects/" nameName="Create Object" component={Objects} />
                             <Route exact path="/objects/:objectId/" nameName="Update Object" component={Objects} />
+                            <Route exact path="/rooms/" nameName="Create Room" component={Rooms} />
+                            <Route exact path="/rooms/:roomId/" nameName="Update Room" component={Rooms} />
                         </div>
                     </div>
                 </Router>

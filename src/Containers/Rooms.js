@@ -16,6 +16,7 @@ class Areas extends React.Component {
         this.state = {
             errors: [],
             niceName: "Create Room",
+            roomId: 0,
             rooms: [],
             room: { 
                 id: 0,
@@ -26,7 +27,41 @@ class Areas extends React.Component {
                 exits: [],
                 extra_descr_data: [],
                 roomtext_data: []
-            }
+            }, 
+            room_flags: [
+                { text: "ROOM_DARK", value: 1, key: 0 },
+                { text: "ROOM_SACRED", value: 2, key: 1 },
+                { text: "ROOM_NO_MOB", value: 4, key: 2 },
+                { text: "ROOM_INDOORS", value: 8, key: 3 },
+                { text: "ROOM_QUIET", value: 16, key: 4 },
+                { text: "ROOM_NO_SHADOWPLANE", value: 32, key: 5 },
+                { text: "ROOM_NO_SPELL", value: 64, key: 6 },
+                { text: "ROOM_NO_CLAIMORCALL", value: 128, key: 7 },
+                { text: "ROOM_BANK", value: 256, key: 8 },
+                { text: "ROOM_PRIVATE", value: 512, key: 9 },
+                { text: "ROOM_SAFE", value: 1024, key: 10 },
+                { text: "ROOM_SOLITARY", value: 2048, key: 11 },
+                { text: "ROOM_NO_RECALL", value: 8192, key: 12 },
+                { text: "ROOM_CONE_OF_SILENCE", value: 16384, key: 13 },
+                { text: "ROOM_NO_TELEPORT", value: 32768, key: 14 },
+                { text: "ROOM_NO_MIST", value: 65536, key: 15 },
+                { text: "ROOM_NO_TRANSPORT", value: 131072, key: 16 },
+                { text: "ROOM_NO_ESCAPE", value: 262144, key: 17 },
+                { text: "ROOM_NO_HOME", value: 524288, key: 18 },
+                { text: "ROOM_NO_SUMMON", value: 1048576, key: 19 }
+            ],
+            room_sectors: [
+                { text: "Inside", value: 0, key: 0 },
+                { text: "City", value: 1, key: 1 },
+                { text: "Field", value: 2, key: 2 },
+                { text: "Forest", value: 3, key: 3 },
+                { text: "Hills", value: 4, key: 4 },
+                { text: "Mountain", value: 5, key: 5 },
+                { text: "Water (Swim)", value: 6, key: 6 },
+                { text: "Water (Noswim)", value: 7, key: 7 },
+                { text: "Air", value: 9, key: 9 },
+                { text: "Desert", value: 10, key: 10 }
+            ]
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -34,12 +69,12 @@ class Areas extends React.Component {
         this.getRoom = this.getRoom.bind(this);
     }
 
-    getAreas() {
+    getRooms() {
         var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
         let self = this;
         let Rooms = [];
         db.transaction(function(tx){
-            tx.executeSql("SELECT * FROM areas LIMIT 10000", [], function(tx, rs) {
+            tx.executeSql("SELECT * FROM rooms LIMIT 10000", [], function(tx, rs) {
                 if( rs.rows.length >= 1 ) {
                     for( var i=0; i<rs.rows.length; i++ ) {
                         Rooms.push({
@@ -64,7 +99,7 @@ class Areas extends React.Component {
 
         if( typeof this.props.match.params.roomId !== "undefined" ) {
             this.setState({ roomId: this.props.match.params.roomId, niceName: "Update Room" });
-            this.getArea(this.props.match.params.roomId);
+            this.getRoom(this.props.match.params.roomId);
         }
 
         document.title = this.state.niceName;
@@ -75,7 +110,7 @@ class Areas extends React.Component {
 
         if( typeof this.props.match.params.roomId !== "undefined" ) {
             this.setState({ roomId: this.props.match.params.roomId, niceName: "Update Room" });
-            this.getArea(this.props.match.params.roomId);
+            this.getRoom(this.props.match.params.roomId);
         }
 
         document.title = this.state.niceName;
@@ -93,11 +128,11 @@ class Areas extends React.Component {
                             id: rs.rows[0].id,
                             name: rs.rows[0].name,
                             description: rs.rows[0].description,
-                            room_flags: rs.rows[0].room_flags,
+                            room_flags: JSON.parse(rs.rows[0].room_flags),
                             sector_type: rs.rows[0].sector_type,
-                            exits: rs.rows[0].exits,
-                            extra_descr_data: rs.rows[0].extra_descr_data,
-                            roomtext_data: rs.rows[0].roomtext_data
+                            exits: JSON.parse(rs.rows[0].exits),
+                            extra_descr_data: JSON.parse(rs.rows[0].extra_descr_data),
+                             roomtext_data: JSON.parse(rs.rows[0].roomtext_data)
                         }
                     });
                 }
@@ -107,15 +142,13 @@ class Areas extends React.Component {
         });
     }
 
-    handleChange(e) {
-        const { name, value } = e.target;
-
+    handleChange = (e, {name, value}) => {
         this.setState(
             prevState => ({
                 room: {
-                    ...prevState.area,
+                    ...prevState.room,
                     [name]: value
-                }
+    }
             })    
         );
     }
@@ -127,11 +160,10 @@ class Areas extends React.Component {
         if( this.state.errors.length > 0 )
             return false;
 
-        if( this.state.areaId === 0 ) {
+        if( this.state.roomId === 0 )
             this.createRoom();
-        }
         else 
-            this.udpdateRoom();
+            this.updateRoom();
     }
 
     createRoom() {
@@ -139,24 +171,24 @@ class Areas extends React.Component {
         var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
 
         db.transaction(function (tx) {
-            tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
-                self.props.history.push("/areas/"+res.insertId+"/");
-            }, function(ts, error) {
-                console.log(error);
-            });
+            tx.executeSql(
+                "INSERT INTO rooms (name, description, room_flags, sector_type, exits, extra_descr_data, roomtext_data, area_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+                [self.state.room.name, self.state.room.description, JSON.stringify(self.state.room.room_flags), self.state.room.sector_type, JSON.stringify(self.state.room.exits), JSON.stringify(self.state.room.extra_descr_data), JSON.stringify(self.state.room.roomtext_data), self.props.areas.activeArea], 
+                function(tx, res){
+                    console.log(tx);
+                    console.log(res);
+                    self.props.history.push("/rooms/"+res.insertId+"/");
+                }, function(ts, error) {
+                    console.log(error);
+                }
+            );
         });
     }
 
     updateRoom() {
         let self = this;
         var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
-        db.transaction(function (tx) {
-            tx.executeSql("UPDATE areas SET name = ?, created_by = ? WHERE rowid = ?", [self.state.area.name, self.state.area.created_by, self.state.areaId], function(tx, res){
-                self.getAreas();
-            }, function(ts, error) {
-                console.log(error);
-            });
-        });
+        
     }
     
     render() {
@@ -170,9 +202,9 @@ class Areas extends React.Component {
                                 <div id="areas-list" className="fade-in">
                                     <List divided relaxed>
                                         {this.state.rooms.map((room) => (
-                                            <List.Item key={"room-"+area.id}>
+                                            <List.Item key={"room-"+room.id}>
                                                 <List.Content>
-                                                    <Link to={"/rooms/" + area.id + "/"}>
+                                                    <Link to={"/rooms/" + room.id + "/"}>
                                                         <List.Header>({room.id}) {room.name}</List.Header>
                                                     </Link>
                                                     <List.Description>{room.created_by}</List.Description>
@@ -199,16 +231,12 @@ class Areas extends React.Component {
                                         </Message>
                                     }
                                     <Form>
-                                        <Form.Group widths='equal'>
-                                            <Form.Input fluid name="name" label='Area Name' placeholder='Area Name Here' value={this.state.area.name} onChange={this.handleChange} />
-                                            <Form.Input fluid name="created_by" label='Created By' placeholder='Your Name Here' value={this.state.area.created_by} onChange={this.handleChange} />
-                                        </Form.Group>
-                                        <Form.Group widths="equal">
-                                            <Form.Button onClick={this.handleSubmit} color="black" content={this.state.niceName} />
-                                            {this.state.areaId !== 0 &&
-                                                 <Form.Button color="green" onClick={this.setNewActiveArea}>Open {this.state.area.name} for Building</Form.Button>
-                                            }
-                                        </Form.Group>
+                                        <Form.Input fluid name="name" value={this.state.room.name} label="Room Name" placeholder="Room Name Here" onChange={this.handleChange} />
+                                        <Form.TextArea name="description" label='Look' placeholder='The mob looks back at you!' value={this.state.room.description} onChange={this.handleChange} />
+                                        <Form.Dropdown label="Room Flags" name="room_flags" fluid multiple selection options={this.state.room_flags} value={this.state.room.room_flags} onChange={(e,{value}) => this.setState(prevState => ({room: {...prevState.room, room_flags: [...value]}}))}   />
+                                        <Form.Dropdown label="Room Sector" name="sector_type" fluid selection options={this.state.room_sectors} value={this.state.room.sector_type} onChange={this.handleChange}   />
+
+                                        <Form.Button onClick={this.handleSubmit} color="black" content={this.state.niceName} />
                                     </Form>
                                 </div>
                             </Grid.Column>
