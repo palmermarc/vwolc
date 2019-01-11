@@ -42,3 +42,27 @@
     max-width: 900px;
     text-align: center;
 }
+
+#mobs-list .list .item .ui.text.menu a {
+    padding: 0;
+}
+
+#mobs-list .list .item .ui.text.menu a:after {
+    content: "|";
+    padding: 5px;
+}
+
+#mobs-list .list .item .ui.text.menu a:last-of-type:after {
+    content: "";
+    padding: 0;
+}
+
+#mobs-list .list .item .ui.text.menu {
+    margin: 0;
+    padding: 0;
+}
+
+
+.ui.segment.scale.visible.transition {
+    text-align: center;
+}

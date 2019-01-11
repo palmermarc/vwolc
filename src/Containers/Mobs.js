@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Grid, Button, List, Popup, Icon, Input, Segment, Divider, Form, Message } from 'semantic-ui-react';
+import { Grid, Button, List, Popup, Icon, Input, Segment, Divider, Form, Message, Menu } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import config from '../constants/config';
 const isNumber = require('is-number');
@@ -13,6 +13,7 @@ class Mobs extends React.Component {
         this.config = config;
 
         this.state = {
+            open: false,
             errors: [],
             mobId: 0,
             niceName: "Create Mob",
@@ -307,6 +308,8 @@ class Mobs extends React.Component {
     }
 
     render( ) {
+        const { open } = this.state
+
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
@@ -319,10 +322,12 @@ class Mobs extends React.Component {
                                         {this.state.mobs.map((mob) => (
                                             <List.Item key={"mob" + mob.id}>
                                                 <List.Content>
-                                                    <List.Header>
-                                                        <Link to={"/mobs/" + mob.id + "/"}>({mob.id}) {mob.name}</Link>
-                                                    </List.Header>
-                                                    <List.Description>{mob.short_description}</List.Description>
+                                                    <List.Header>({mob.id}) {mob.short_description}</List.Header>
+                                                    <List.Description>
+                                                        <Menu text horizontal="true">
+                                                            <Menu.Item as={Link} to={'/mobs/' + mob.id + '/'}>Edit Mob</Menu.Item>
+                                                        </Menu>
+                                                    </List.Description>
                                                 </List.Content>
                                             </List.Item>
                                         ))}
