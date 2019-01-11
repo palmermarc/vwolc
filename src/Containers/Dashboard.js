@@ -5,10 +5,6 @@ import { Segment, Header } from 'semantic-ui-react'
 
 class Dashboard extends Component {
 
-    constructor(props, context) {
-        super(props, context);
-    }
-
     render() {
         return (
             <Segment id="dashboard" placeholder>

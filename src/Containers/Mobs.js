@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Grid, Button, List, Popup, Icon, Input, Segment, Divider, Form, Message, Dropdown } from 'semantic-ui-react';
+import { Grid, Button, List, Popup, Icon, Input, Segment, Divider, Form, Message } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import config from '../constants/config';
 const isNumber = require('is-number');
@@ -29,7 +29,7 @@ class Mobs extends React.Component {
                 "long_description":	"",
                 "description":	"",
                 "act":	0,
-                "affected_by": 0,
+                "affected_by": [],
                 "alignment": 0,
                 "level": 0,
                 "exp_level": 0,
@@ -165,7 +165,6 @@ class Mobs extends React.Component {
     }
 
     getMob(mobId) {
-        console.log(mobId);
         let self = this;
         let mob = {
             "vnum": 1,
@@ -174,7 +173,7 @@ class Mobs extends React.Component {
             "long_description": "",
             "description":  "",
             "act":  0,
-            "affected_by": 0,
+            "affected_by": [],
             "alignment": 0,
             "level": 0,
             "exp_level": 0,
@@ -189,23 +188,18 @@ class Mobs extends React.Component {
         var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM mobs WHERE area_id = '" + self.props.areas.activeArea + "' AND id = '" + mobId + "'", [], function(tx, rs) {
-                console.log(rs);
-                console.log(tx);
                 if( rs.rows.length ) {
                     mob = rs.rows[0];
+                    mob.affected_by = JSON.parse(mob.affected_by);
                     self.setState({mob: mob});
                 }
             }, function(error) {
                 console.log(error);
             });
         });
- 
-        console.log(mob);
     }
 
     handleSubmit = () => {
-        console.log(this.state.mob);
-
         let errors = [];
 
         if( this.state.mob.ac < 0 ) {
@@ -290,10 +284,9 @@ class Mobs extends React.Component {
 
     saveMob() {
         let self = this;
-        console.log("Trying to save");
         var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
         db.transaction(function(tx){
-            tx.executeSql("INSERT INTO mobs (vnum, name, short_description, long_description, description, act, affected_by, alignment, level, exp_level, hitroll, damroll, ac, hp, gold, sex, area_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.state.mob.vnum, self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, self.state.mob.affected_by, self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.props.areas.activeArea], function(tx, rs) {
+            tx.executeSql("INSERT INTO mobs (vnum, name, short_description, long_description, description, act, affected_by, alignment, level, exp_level, hitroll, damroll, ac, hp, gold, sex, area_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.state.mob.vnum, self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, JSON.stringify(self.state.mob.affected_by), self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.props.areas.activeArea], function(tx, rs) {
                 self.props.history.push("/mobs/"+rs.insertId+"/");
             }, function(error) {
                 console.log(error);
@@ -303,10 +296,9 @@ class Mobs extends React.Component {
 
     updateMob() {
         let self = this;
-        console.log("Trying to update");
         var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
         db.transaction(function(tx){
-            tx.executeSql("UPDATE MOBS set name = ?, short_description = ?, long_description = ?, description = ?, act = ?, affected_by = ?,  alignment = ?, level = ?, exp_level = ?, hitroll = ?, damroll = ?, ac = ?, hp = ?, gold = ?, sex = ? WHERE id = ?", [self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, self.state.mob.affected_by, self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.state.mobId], function(tx, rs) {
+            tx.executeSql("UPDATE MOBS set name = ?, short_description = ?, long_description = ?, description = ?, act = ?, affected_by = ?,  alignment = ?, level = ?, exp_level = ?, hitroll = ?, damroll = ?, ac = ?, hp = ?, gold = ?, sex = ? WHERE id = ?", [self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, JSON.stringify(self.state.mob.affected_by), self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.state.mobId], function(tx, rs) {
                 self.getMobs();
             }, function(error) {
                 console.log(error);
@@ -315,7 +307,6 @@ class Mobs extends React.Component {
     }
 
     render( ) {
-        console.log(this.props.areas);
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
@@ -378,7 +369,7 @@ class Mobs extends React.Component {
                                             <Form.Input fluid name="ac" label='Armor' placeholder='0' value={this.state.mob.ac} onChange={this.handleChange}  />
                                         </Form.Group>
                                         <Form.Group widths="equal">
-                                            <Dropdown label='Affects'   placeholder='Affects' name="affected_by" fluid multiple selection options={this.state.affects} />
+                                            <Form.Dropdown label='Affects' placeholder='Affects' name="affected_by" fluid multiple selection options={this.state.affects} value={this.state.mob.affected_by} onChange={(e,{value}) => this.setState(prevState => ({mob: {...prevState.mob,affected_by: [...value]}}))}   />
                                         </Form.Group>
                                         <Form.Button content={this.state.niceName} />
                                     </Form>

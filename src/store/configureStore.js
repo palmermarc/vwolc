@@ -4,20 +4,12 @@ import combineReducers from '../_reducers';
 import InitialState from './InitialState';
 
 function configureStoreProd(initialState) {
-    const middlewares = [
-        thunk,
-    ];
-
     return createStore(combineReducers, initialState, compose(
         applyMiddleware(thunk)
     ));
 }
 
 function configureStoreDev(initialState) {
-    const middlewares = [
-      thunk,
-    ];
-
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // add support for Redux dev tools
     const store = createStore(combineReducers, initialState, composeEnhancers(
       applyMiddleware(thunk)

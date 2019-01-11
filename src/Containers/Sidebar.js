@@ -17,8 +17,6 @@ class Sidebar extends Component {
         this.state = {
             opened: true,
         };
-
-        console.log(this.props);
     }
 
     render() {
