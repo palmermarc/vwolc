@@ -1,7 +1,7 @@
 {
   "main.css": "/vwolc/static/css/main.210602a2.chunk.css",
-  "main.js": "/vwolc/static/js/main.4c4d2e86.chunk.js",
-  "main.js.map": "/vwolc/static/js/main.4c4d2e86.chunk.js.map",
+  "main.js": "/vwolc/static/js/main.a6d6ddfe.chunk.js",
+  "main.js.map": "/vwolc/static/js/main.a6d6ddfe.chunk.js.map",
   "static/js/1.b8169475.chunk.js": "/vwolc/static/js/1.b8169475.chunk.js",
   "static/js/1.b8169475.chunk.js.map": "/vwolc/static/js/1.b8169475.chunk.js.map",
   "runtime~main.js": "/vwolc/static/js/runtime~main.99ab24e4.js",
@@ -9,6 +9,6 @@
   "static/media/Logo.svg": "/vwolc/static/media/Logo.4267e72a.svg",
   "static/css/main.210602a2.chunk.css.map": "/vwolc/static/css/main.210602a2.chunk.css.map",
   "index.html": "/vwolc/index.html",
-  "precache-manifest.ea7311d82e8cf400eb860e0672826e9d.js": "/vwolc/precache-manifest.ea7311d82e8cf400eb860e0672826e9d.js",
+  "precache-manifest.5bd19ca2d839c1b39495bfa28efa5827.js": "/vwolc/precache-manifest.5bd19ca2d839c1b39495bfa28efa5827.js",
   "service-worker.js": "/vwolc/service-worker.js"
 }
