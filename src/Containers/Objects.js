@@ -107,7 +107,28 @@ class Objects extends React.Component {
                 { key : 12, text : "Mobile", value : 2048 },
                 { key : 13, text : "Action", value : 4096 },
                 { key : 14, text : "Morph", value : 8192 },
-            ]
+            ],
+			affects: [
+				{ text: "STR", value: 1, key: 1 },
+				{ text: "DEX", value: 2, key: 2 },
+				{ text: "INT", value: 3, key: 3 },
+				{ text: "WIS", value: 4, key: 4 },
+				{ text: "CON", value: 5, key: 5 },
+				{ text: "Sex", value: 6, key: 6 },
+				{ text: "Mana", value: 12, key: 12 },
+				{ text: "Hp", value: 13, key: 13 },
+				{ text: "Move", value: 14, key: 14 },
+				{ text: "Gold", value: 15, key: 15 },
+				{ text: "EXP", value: 16, key: 16 },
+				{ text: "Armor", value: 17, key: 17 },
+				{ text: "Hitroll", value: 18, key: 18 },
+				{ text: "Damroll", value: 19, key: 19 },
+				{ text: "SAVING_PARA", value: 20, key: 20 },
+				{ text: "SAVING_ROD", value: 21, key: 21 },
+				{ text: "SAVING_PETRI", value: 22, key: 22 },
+				{ text: "SAVING_BREATH", value: 23, key: 23 },
+				{ text: "SAVING_SPELL", value: 24, key: 24 }
+			]
         };
 
         this.getObject = this.getObject.bind(this);
@@ -117,6 +138,7 @@ class Objects extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
 		this.addNewExtras = this.addNewExtras.bind(this);
+		this.addNewAffects = this.addNewAffects.bind(this);
     }
 
     componentDidMount() {
@@ -318,6 +340,33 @@ class Objects extends React.Component {
 			})
 		);
 	}
+	
+	addNewAffects() {
+		this.setState(
+			prevState => ({
+				object: {
+					...prevState.object,
+					affect_data: this.state.object.affect_data.concat([{ location: 0, modifier: 0 }])
+				}
+			})	
+		);
+	}
+	
+	handleAffectsChange = (idx, fieldName) => (evt) => {
+		const newAffects = this.state.object.affect_data.map((affect, sidx) => {
+			if (idx !== sidx) return affect;
+			return { ...affect, [fieldName]: evt.target.value };
+		});
+
+		this.setState(
+			prevState => ({
+				object: {
+					...prevState.object,
+					affect_data: newAffects
+				}
+			})
+		);
+	}
 
     render() {
         console.log(this.state);
@@ -341,71 +390,86 @@ class Objects extends React.Component {
                                             </List.Item>
                                         </List>
                                     ))}
-                                    <div id="view-header-section">
-                                        <Button as={Link} to={'/objects/'} className="view-create-new">
-                                            <Icon name="plus" />
-                                            Create New
-                                        </Button>
-                                    </div>
-                                    </div>
-                                    </Grid.Column>
-                                    <Grid.Column>
-                                    <div id="object-stats" className="fade-in">
-                                        {this.state.errors.length > 0  &&
-                                            <Message negative>
-                                                <Message.Header>Please fix the following errors:</Message.Header>
-                                                {this.state.errors.map((error) => (
-                                                    <p>{error.message}</p>
-                                                ))}
-                                            </Message>
-                                        }
-                                        <Form onSubmit={this.handleSubmit}>
-                                            <Form.Group widths='equal'>
-                                                <Form.Field>
-													<label>Namelist <Popup trigger={<Button icon='help circle' />} content="This is the list of names that your object can be found under. If you don't add it here, it won't show up on locate." /></label>
-													<Input name="name"  value={this.state.object.name} placeholder='name' onChange={this.handleChange} />
-												</Form.Field>
-												<Form.Field>
-													<label>Short Description <Popup trigger={<Button icon='help circle' />} content="The string that shows in someone's inventory." /></label>
-													<Input name="short_description"  value={this.state.object.short_description} placeholder="" onChange={this.handleChange} />
-												</Form.Field>
-                                            </Form.Group>
-                                            <Form.Field>
-												<label>Description <Popup trigger={<Button icon='help circle' />} content="The string that shows up when an item is on the ground, or you look at it." /></label>
-												<Input name="description"  value={this.state.object.description} placeholder="" onChange={this.handleChange} />
+									<div id="view-header-section">
+										<Button as={Link} to={'/objects/'} className="view-create-new">
+											<Icon name="plus" />
+											Create New
+										</Button>
+									</div>
+								</div>
+							</Grid.Column>
+							<Grid.Column>
+								<div id="object-stats" className="fade-in">
+									{this.state.errors.length > 0  &&
+										<Message negative>
+											<Message.Header>Please fix the following errors:</Message.Header>
+											{this.state.errors.map((error) => (
+												<p>{error.message}</p>
+											))}
+										</Message>
+									}
+									
+									<Form>
+										<Form.Group widths='equal'>
+											<Form.Field>
+												<label>Namelist <Popup trigger={<Button icon='help circle' />} content="This is the list of names that your object can be found under. If you don't add it here, it won't show up on locate." /></label>
+												<Input name="name"  value={this.state.object.name} placeholder='name' onChange={this.handleChange} />
 											</Form.Field>
-                                            <Form.Field>
-                                                <label>Extra Flags</label>
-                                                <Dropdown label='Extra Flags' name="extra_flags" fluid multiple selection options={this.state.extra_flags} />
-                                            </Form.Field>
-                                            <Form.Field>
-												<label>Wear Flags <Popup trigger={<Button icon='help circle' />} content="If you do not select Take as an option, you will not be able to pick this up no matter what other option you select." /></label>
-                                                <Dropdown name="wear_flags" fluid multiple selection options={this.state.wear_flags} />
-                                            </Form.Field>
-                                            <Form.Field>
-                                                <label>Specials</label>
-                                                <Dropdown name="specials" fluid multiple selection options={this.state.specials} />
-                                            </Form.Field>
+											<Form.Field>
+												<label>Short Description <Popup trigger={<Button icon='help circle' />} content="The string that shows in someone's inventory." /></label>
+												<Input name="short_description"  value={this.state.object.short_description} placeholder="" onChange={this.handleChange} />
+											</Form.Field>
+										</Form.Group>
+										<Form.Field>
+											<label>Description <Popup trigger={<Button icon='help circle' />} content="The string that shows up when an item is on the ground, or you look at it." /></label>
+											<Input name="description"  value={this.state.object.description} placeholder="" onChange={this.handleChange} />
+										</Form.Field>
+										<Form.Field>
+											<label>Extra Flags</label>
+											<Dropdown label='Extra Flags' name="extra_flags" fluid multiple selection options={this.state.extra_flags} />
+										</Form.Field>
+										<Form.Field>
+											<label>Wear Flags <Popup trigger={<Button icon='help circle' />} content="If you do not select Take as an option, you will not be able to pick this up no matter what other option you select." /></label>
+											<Dropdown name="wear_flags" fluid multiple selection options={this.state.wear_flags} />
+										</Form.Field>
+										<Form.Field>
+											<label>Specials</label>
+											<Dropdown name="specials" fluid multiple selection options={this.state.specials} />
+										</Form.Field>
 											
-											<Container>
-												<Header as="h3">Extra Descriptions</Header>
-												{this.state.object.extra_descr_data.map((extra, i) => (
-													<Form.Group key={i}>
-														<Form.Input fluid name="keywords" value={this.state.object.extra_descr_data[i].keywords} label="Keywords" placeholder="keyword" onChange={this.handleExtrasChange(i, "keywords")} />
-														<Form.TextArea rows={1} name="description" label="Description" placeholder="What shows up when someone looks at the keyword?" value={this.state.object.extra_descr_data[i].description} onChange={this.handleExtrasChange(i, "description")} />
-													</Form.Group>
-												))}
-												<Button onClick={this.addNewExtras}>Add Extra Desc</Button>
-											</Container>
-                                            <Form.Button content={this.state.niceName} />
-                                        </Form>
-                                    </div>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Segment>
-                </div>
-            );
+										<Container>
+											<Header as="h3">Extra Descriptions</Header>
+											{this.state.object.extra_descr_data.map((extra, i) => (
+												<Form.Group key={i}>
+													<Form.Input fluid name="keywords" value={this.state.object.extra_descr_data[i].keywords} label="Keywords" placeholder="keyword" onChange={this.handleExtrasChange(i, "keywords")} />
+													<Form.TextArea rows={1} name="description" label="Description" placeholder="What shows up when someone looks at the keyword?" value={this.state.object.extra_descr_data[i].description} onChange={this.handleExtrasChange(i, "description")} />
+												</Form.Group>
+											))}
+											<Button onClick={this.addNewExtras}>Add Extra Desc</Button>
+										</Container>
+										
+										<Container>
+											<Header as="h3">Affects</Header>
+											{this.state.object.affect_data.map((extra, i) => (
+												<Form.Group key={i}>
+													<Form.Field>
+														<label>Attribute</label>
+														<Dropdown name="location" fluid multiple selection options={this.state.affects} value={this.state.object.affect_data[i].location} onChange={this.handleAffectsChange(i, "location")} />
+													</Form.Field>
+													<Form.Input fluid name="modifier" value={this.state.object.affect_data[i].modifier} label="Amount" placeholder="0" onChange={this.handleExtrasChange(i, "modifier")} />
+												</Form.Group>
+											))}
+											<Button onClick={this.addNewAffects}>Add Affect</Button>
+										</Container>
+										<Form.Button onClick={this.handleSubmit} content={this.state.niceName} />
+									</Form>
+								</div>
+							</Grid.Column>
+						</Grid.Row>
+					</Grid>
+				</Segment>
+			</div>
+		);
     }
 }
 
