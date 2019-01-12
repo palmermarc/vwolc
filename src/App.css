@@ -66,3 +66,10 @@
 .ui.segment.scale.visible.transition {
     text-align: center;
 }
+
+.ui.container {
+	padding: 2em;
+	border: 1px solid #ececec;
+	background-color: #fff;
+	margin: 2em 0;
+}

@@ -309,8 +309,6 @@ class Mobs extends React.Component {
     }
 
     render( ) {
-        const { open } = this.state
-
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>

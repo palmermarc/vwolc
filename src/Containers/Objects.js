@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Grid, Button, List, Icon, Segment, Divider, Form, Message, Dropdown, Label } from 'semantic-ui-react';
+import { Grid, Button, List, Icon, Segment, Divider, Form, Message, Dropdown, Label, Popup, Input, Container, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import config from '../constants/config';
 
@@ -25,9 +25,9 @@ class Objects extends React.Component {
                 short_description: "my first object",
                 description: "This is my first object. Ain't it perty?",
             }],
-            object : {
-                id:   0,
-                name:   "",
+            object: {
+                id: 0,
+                name: "",
                 short_description: "",
                 description: "",
                 item_type:  0,
@@ -39,74 +39,74 @@ class Objects extends React.Component {
                 value3: 0,
                 weight: 0,
                 cost:   0,
-                affect_data:    [],
-                extra_descr_data:   [],
-                chpoweron:  "",
+                affect_data: [],
+                extra_descr_data: [],
+                chpoweron: "",
                 chpoweroff: "",
                 chpoweruse: "",
-                victpoweron:    "",
-                victpoweroff:   "",
-                victpoweruse:   "",
-                spectype:   0,
+                victpoweron: "",
+                victpoweroff: "",
+                victpoweruse: "",
+                spectype: 0,
                 specpower: 0
             },
             extra_flags : [
-                {key: "1", text: "Glow", value: "1" },
-                {key: "2", text: "Hum", value: "2" },
-                {key: "4", text: "Throw", value:"4" },
-                {key: "8", text: "Keep", value: "8" },
-                {key: "16", text: "Vanish", value: "16" },
-                {key: "32", text: "Invis", value: "32" },
-                {key: "64", text: "Magic", value:"64" },
-                {key: "128", text: "No Drop", value:"128" },
-                {key: "256", text: "Bless", value:"256" },
-                {key: "512", text: "Anti-Good", value:"512" },
-                {key: "1024", text: "Anti-Evil", value:"1024" },
-                {key: "2048", text: "Anti-Neutral", value: "2048" },
-                {key: "4096", text: "No Remove", value: "4096" },
-                {key: "8192", text: "Inventory", value: "8192" },
-                {key: "16384", text: "Loyal", value: "16384" },
-                {key: "32768", text: "Shadowplane", value: "32768" },
-                {key: "65536", text: "Silver", value: "65536" },
-                {key: "131072", text: "No Quest Card", value: "131072" },
-                {key: "262144", text: "Quest Item", value : "262144" },
-                {key: "524288", text: "Clan Iotem", value : "524288" },
-                {key: "1048576", text: "Auto Claim", value : "1048576" },
-                {key: "2097152", text: "Silent Vanish", value : "2097152" },
+                {key: 1, text: "Glow", value: 1 },
+                {key: 2, text: "Hum", value: 2 },
+                {key: 3, text: "Throw", value: 4 },
+                {key: 4, text: "Keep", value: 8 },
+                {key: 5, text: "Vanish", value: 16 },
+                {key: 6, text: "Invis", value: 32 },
+                {key: 7, text: "Magic", value: 64 },
+                {key: 8, text: "No Drop", value: 128 },
+                {key: 9, text: "Bless", value: 256 },
+                {key: 10, text: "Anti-Good", value: 512 },
+                {key: 11, text: "Anti-Evil", value: 1024 },
+                {key: 12, text: "Anti-Neutral", value: 2048 },
+                {key: 13, text: "No Remove", value: 4096 },
+                {key: 14, text: "Inventory", value: 8192 },
+                {key: 15, text: "Loyal", value: 16384 },
+                {key: 16, text: "Shadowplane", value: 32768 },
+                {key: 17, text: "Silver", value: 65536 },
+                {key: 18, text: "No Quest Card", value: 131072 },
+                {key: 19, text: "Quest Item", value : 262144 },
+                {key: 20, text: "Clan Iotem", value : 524288 },
+                {key: 21, text: "Auto Claim", value : 1048576 },
+                {key: 22, text: "Silent Vanish", value : 2097152 },
             ],
             wear_flags: [
                 { key: 1, text : "Take", value : 1 },
                 { key: 2, text : "Finger", value : 2 },
-                { key: 4, text : "Neck", value : 4 },
-                { key: 8, text : "Body", value : 8 },
-                { key: 16, text : "Head", value : 16 },
-                { key: 32, text : "Legs", value : 32 },
-                { key: 64, text : "Feet", value : 64 },
-                { key: 128, text: "Hands", value : 128 },
-                { key: 256, text : "Arms", value : 256 },
-                { key: 512, text : "Shield", value : 512 },
-                { key: 1024, text : "About", value : 1024 },
-                { key: 2048, text : "Waist", value : 2048 },
-                { key: 4096, text : "Wrist", value : 4096 },
-                { key: 8192, text : "Wield", value : 8192 },
-                { key: 16384, text : "Hold", value : 16384 },
-                { key: 32768, text : "Wear Face", value : 32768 },
+                { key: 3, text : "Neck", value : 4 },
+                { key: 4, text : "Body", value : 8 },
+                { key: 5, text : "Head", value : 16 },
+                { key: 6, text : "Legs", value : 32 },
+                { key: 7, text : "Feet", value : 64 },
+                { key: 8, text: "Hands", value : 128 },
+                { key: 9, text : "Arms", value : 256 },
+                { key: 10, text : "Shield", value : 512 },
+                { key: 11, text : "About", value : 1024 },
+                { key: 12, text : "Waist", value : 2048 },
+                { key: 13, text : "Wrist", value : 4096 },
+                { key: 14, text : "Wield", value : 8192 },
+                { key: 15, text : "Hold", value : 16384 },
+                { key: 16, text : "Wear Face", value : 32768 },
             ],
             specials: [
-                { key : 1, text : "Activate", value : "1" },
-                { key : 2, text : "Twist", value : "2" },
-                { key : 4, text : "Press", value : "4" },
-                { key : 8, text : "Pull", value : "8" },
-                { key : 16, text : "Target", value : "16" },
-                { key : 32, text : "Spell", value : "32" },
-                { key : 64, text : "Transporter", value : "64" },
-                { key : 128, text : "Teleporter", value : "128" },
-                { key : 256, text : "Delay 1", value : "256" },
-                { key : 512, text : "Delay 2", value : "512" },
-                { key : 1024, text : "Object", value : "1024" }, 
-                { key : 2048, text : "Mobile", value : "2048" },
-                { key : 4096, text : "Action", value : "4096" },
-                { key : 8192, text : "Morph", value : "8192" },
+                { key : 1, text : "Activate", value : 1 },
+                { key : 2, text : "Twist", value : 2 },
+                { key : 3, text : "Press", value : 4 },
+                { key : 4, text : "Pull", value : 8 },
+                { key : 5, text : "Target", value : 16 },
+                { key : 6, text : "Spell", value : 32 },
+                { key : 7, text : "Transporter", value : 64 },
+                { key : 8, text : "Teleporter", value : 128 },
+                { key : 9, text : "Delay 1", value : 256 },
+                { key : 10, text : "Delay 2", value : 512 },
+                { key : 11, text : "Object", value : 1024 }, 
+                { key : 12, text : "Mobile", value : 2048 },
+                { key : 13, text : "Action", value : 4096 },
+                { key : 14, text : "Morph", value : 8192 },
             ]
         };
 
@@ -116,6 +116,7 @@ class Objects extends React.Component {
         this.updateObject = this.updateObject.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+		this.addNewExtras = this.addNewExtras.bind(this);
     }
 
     componentDidMount() {
@@ -203,39 +204,46 @@ class Objects extends React.Component {
     }
 
     getObject(objectId) {
-        console.log(objectId);
         let self = this;
-        let object = {
-            "vnum": 1,
-            "name": "",
-            "short_description": "",
-            "description": "",
-            "act":  0,
-            "affected_by": 0,
-            "alignment": 0,
-            "level": 0,
-            "exp_level": 0,
-            "hitroll":  0,
-            "damroll":  0,
-            "ac": 0,
-            "hp": 100,
-            "gold": 10,
-            "sex":  0
-        };
-
+  
         var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM objects WHERE area_id = '" + self.props.areas.activeArea + "' AND id = '" + objectId + "'", [], function(tx, rs) {
                 if( rs.rows.length ) {
-                    object = rs.rows[0];
-                    self.setState({object: object});
+                    let object = rs.rows[0];
+					
+					self.setState({
+						object: {
+							id: object.id,
+							name: object.name,
+							short_description: object.short_description,
+							description: object.description,
+							item_type: object.item_type,
+							extra_flags: JSON.parse(object.extra_flags),
+							wear_flags: JSON.parse(object.wear_flags),
+							value0: object.value0,
+							value1: object.value1,
+							value2: object.value2,
+							value3: object.value3,
+							weight: object.weight,
+							cost: object.cost,
+							affect_data: JSON.parse(object.affect_data),
+							extra_descr_data: JSON.parse(object.extra_descr_data),
+							chpoweron: object.chpoweron,
+							chpoweroff: object.chpoweroff,
+							chpoweruse: object.chpoweruse,
+							victpoweron: object.victpoweron,
+							victpoweroff: object.victpoweroff,
+							victpoweruse: object.victpoweruse,
+							spectype: object.spectype,
+							specpower: object.specpower
+						}
+					});
                 }
             }, function(error) {
                 console.log(error);
             });
         });
- 
-        console.log(object);
     }
 
     handleSubmit = () => {
@@ -283,6 +291,33 @@ class Objects extends React.Component {
             });
         });
     }
+	
+	addNewExtras() {
+		this.setState(
+			prevState => ({
+				object: {
+					...prevState.object,
+					extra_descr_data: this.state.object.extra_descr_data.concat([{ keywords: '', description: '' }])
+				}
+			})	
+		);
+	}
+	
+	handleExtrasChange = (idx, fieldName) => (evt) => {
+		const newExtras = this.state.object.extra_descr_data.map((extra, sidx) => {
+			if (idx !== sidx) return extra;
+			return { ...extra, [fieldName]: evt.target.value };
+		});
+
+		this.setState(
+			prevState => ({
+				object: {
+					...prevState.object,
+					extra_descr_data: newExtras
+				}
+			})
+		);
+	}
 
     render() {
         console.log(this.state);
@@ -326,22 +361,42 @@ class Objects extends React.Component {
                                         }
                                         <Form onSubmit={this.handleSubmit}>
                                             <Form.Group widths='equal'>
-                                                <Form.Input fluid name="name" label="Name" value={this.state.object.name} placeholder='name' onChange={this.handleChange} />
-                                                <Form.Input fluid name="short_description" value={this.state.object.short_description} label='Short Desc' placeholder='Short desc' onChange={this.handleChange} />
+                                                <Form.Field>
+													<label>Namelist <Popup trigger={<Button icon='help circle' />} content="This is the list of names that your object can be found under. If you don't add it here, it won't show up on locate." /></label>
+													<Input name="name"  value={this.state.object.name} placeholder='name' onChange={this.handleChange} />
+												</Form.Field>
+												<Form.Field>
+													<label>Short Description <Popup trigger={<Button icon='help circle' />} content="The string that shows in someone's inventory." /></label>
+													<Input name="short_description"  value={this.state.object.short_description} placeholder="" onChange={this.handleChange} />
+												</Form.Field>
                                             </Form.Group>
-                                            <Form.Input fluid name="description" label="Long Desc" placeholder="Long Description" value={this.state.object.description} onChange={this.handleChange} />
-                                            <Form.Group>
-                                                <Label>Extra Flags</Label>
+                                            <Form.Field>
+												<label>Description <Popup trigger={<Button icon='help circle' />} content="The string that shows up when an item is on the ground, or you look at it." /></label>
+												<Input name="description"  value={this.state.object.description} placeholder="" onChange={this.handleChange} />
+											</Form.Field>
+                                            <Form.Field>
+                                                <label>Extra Flags</label>
                                                 <Dropdown label='Extra Flags' name="extra_flags" fluid multiple selection options={this.state.extra_flags} />
-                                            </Form.Group>
-                                            <Form.Group>
-                                                <Label>Wear Flags</Label>
+                                            </Form.Field>
+                                            <Form.Field>
+												<label>Wear Flags <Popup trigger={<Button icon='help circle' />} content="If you do not select Take as an option, you will not be able to pick this up no matter what other option you select." /></label>
                                                 <Dropdown name="wear_flags" fluid multiple selection options={this.state.wear_flags} />
-                                            </Form.Group>
-                                            <Form.Group>
-                                                <Label>Specials</Label>
+                                            </Form.Field>
+                                            <Form.Field>
+                                                <label>Specials</label>
                                                 <Dropdown name="specials" fluid multiple selection options={this.state.specials} />
-                                            </Form.Group>
+                                            </Form.Field>
+											
+											<Container>
+												<Header as="h3">Extra Descriptions</Header>
+												{this.state.object.extra_descr_data.map((extra, i) => (
+													<Form.Group key={i}>
+														<Form.Input fluid name="keywords" value={this.state.object.extra_descr_data[i].keywords} label="Keywords" placeholder="keyword" onChange={this.handleExtrasChange(i, "keywords")} />
+														<Form.TextArea rows={1} name="description" label="Description" placeholder="What shows up when someone looks at the keyword?" value={this.state.object.extra_descr_data[i].description} onChange={this.handleExtrasChange(i, "description")} />
+													</Form.Group>
+												))}
+												<Button onClick={this.addNewExtras}>Add Extra Desc</Button>
+											</Container>
                                             <Form.Button content={this.state.niceName} />
                                         </Form>
                                     </div>
