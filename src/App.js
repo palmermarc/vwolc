@@ -63,14 +63,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(App);
-
-//<Route exact path="/mobs/create" component={MobsCopy} />
-//<Route exact path="/mobs/:copyId/" component={MobsEdit} />
-//<Route exact path="/user/logout/" component={LogoutPage} />
-//<Route exact path="/login/" component={Login} />
-//<Route exact path="/objects/" component={ObjectsList} />
-//<Route exact path="/objects/create/" component={ObjectCreate} />
-//<Route exact path="/objects/edit/:listenerId/" component={ObjectsList} />
-//<Route exact path="/rooms/" component={RoomsList} />
-//<Route exact path="/rooms/create/" component={RoomsCreate} />
-//<Route exact path="/rooms/edit/:listenerId/" component={RoomsList} />

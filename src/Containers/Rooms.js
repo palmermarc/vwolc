@@ -11,7 +11,6 @@ import config from '../constants/config';
 class Areas extends React.Component {
 	constructor(props, context) {
 		super(props, context);
-		this.config = config;
 		
 		this.state = {
 			errors: [],
@@ -79,7 +78,7 @@ class Areas extends React.Component {
 	}
 
 	getRooms() {
-		var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
 		let self = this;
 		let Rooms = [];
 		db.transaction(function(tx){
@@ -127,7 +126,7 @@ class Areas extends React.Component {
 
 	getRoom( roomId ) {
 		let self = this;
-		var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
 		db.transaction(function(tx){
 			
 			tx.executeSql("SELECT * FROM rooms WHERE id = '" + roomId + "'", [], function(tx, rs) {
@@ -177,7 +176,7 @@ class Areas extends React.Component {
 
 	createRoom() {
 		let self = this;
-		var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+		var db = openDatabase( config.database.name, config.database.version, config.database.description, config.database.size);
 
 		db.transaction(function (tx) {
 			tx.executeSql(
@@ -196,7 +195,7 @@ class Areas extends React.Component {
 	
 	updateRoom() {
 		let self = this;
-		var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
 		
 		db.transaction(function (tx) {
 			tx.executeSql(

@@ -73,3 +73,16 @@
 	background-color: #fff;
 	margin: 2em 0;
 }
+
+.ui.container .header {
+	overflow: visible;
+}
+
+.ui.container .header button {
+    position: absolute;
+    top: -7px;
+    color: #fff;
+    min-width: 150px;
+    background-color: #ff5900;
+    text-shadow: 1px 1px 1px #282c34;
+}

@@ -7,11 +7,9 @@ import { Link } from 'react-router-dom';
 import { Segment, Divider, Grid, Form, Message, List, Button, Icon } from 'semantic-ui-react';
 import config from '../constants/config';
 
-
 class Areas extends React.Component {
     constructor(props, context) {
         super(props, context);
-        this.config = config;
         this.handleChange = this.handleChange.bind(this);
         this.getAreas = this.getAreas.bind(this);
         this.state = {
@@ -32,7 +30,7 @@ class Areas extends React.Component {
     }
 
     getAreas() {
-        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         let self = this;
         let savedAreas = [];
         db.transaction(function(tx){
@@ -81,7 +79,7 @@ class Areas extends React.Component {
 
     getArea( areaId ) {
         let self = this;
-        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function(tx){
             
             tx.executeSql("SELECT * FROM areas WHERE id = '" + areaId + "'", [], function(tx, rs) {
@@ -135,7 +133,7 @@ class Areas extends React.Component {
 
     createArea() {
         let self = this;
-        var db = openDatabase( this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        var db = openDatabase( config.database.name, config.database.version, config.database.description, config.database.size);
 
         db.transaction(function (tx) {
             tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
@@ -148,7 +146,7 @@ class Areas extends React.Component {
 
     updateArea() {
         let self = this;
-        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function (tx) {
             tx.executeSql("UPDATE areas SET name = ?, created_by = ? WHERE rowid = ?", [self.state.area.name, self.state.area.created_by, self.state.areaId], function(tx, res){
                 self.getAreas();

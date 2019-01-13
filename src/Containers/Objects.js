@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Grid, Button, List, Icon, Segment, Divider, Form, Message, Dropdown, Label, Popup, Input, Container, Header } from 'semantic-ui-react';
+import { Grid, Button, List, Icon, Segment, Divider, Form, Message, Dropdown, Popup, Input, Container, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import config from '../constants/config';
 
@@ -9,7 +9,6 @@ class Objects extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.config = config;
 
         var selectedArea = localStorage.getItem('selectedArea');
         if (selectedArea === null) { selectedArea = 0; }
@@ -49,86 +48,7 @@ class Objects extends React.Component {
                 victpoweruse: "",
                 spectype: 0,
                 specpower: 0
-            },
-            extra_flags : [
-                {key: 1, text: "Glow", value: 1 },
-                {key: 2, text: "Hum", value: 2 },
-                {key: 3, text: "Throw", value: 4 },
-                {key: 4, text: "Keep", value: 8 },
-                {key: 5, text: "Vanish", value: 16 },
-                {key: 6, text: "Invis", value: 32 },
-                {key: 7, text: "Magic", value: 64 },
-                {key: 8, text: "No Drop", value: 128 },
-                {key: 9, text: "Bless", value: 256 },
-                {key: 10, text: "Anti-Good", value: 512 },
-                {key: 11, text: "Anti-Evil", value: 1024 },
-                {key: 12, text: "Anti-Neutral", value: 2048 },
-                {key: 13, text: "No Remove", value: 4096 },
-                {key: 14, text: "Inventory", value: 8192 },
-                {key: 15, text: "Loyal", value: 16384 },
-                {key: 16, text: "Shadowplane", value: 32768 },
-                {key: 17, text: "Silver", value: 65536 },
-                {key: 18, text: "No Quest Card", value: 131072 },
-                {key: 19, text: "Quest Item", value : 262144 },
-                {key: 20, text: "Clan Iotem", value : 524288 },
-                {key: 21, text: "Auto Claim", value : 1048576 },
-                {key: 22, text: "Silent Vanish", value : 2097152 },
-            ],
-            wear_flags: [
-                { key: 1, text : "Take", value : 1 },
-                { key: 2, text : "Finger", value : 2 },
-                { key: 3, text : "Neck", value : 4 },
-                { key: 4, text : "Body", value : 8 },
-                { key: 5, text : "Head", value : 16 },
-                { key: 6, text : "Legs", value : 32 },
-                { key: 7, text : "Feet", value : 64 },
-                { key: 8, text: "Hands", value : 128 },
-                { key: 9, text : "Arms", value : 256 },
-                { key: 10, text : "Shield", value : 512 },
-                { key: 11, text : "About", value : 1024 },
-                { key: 12, text : "Waist", value : 2048 },
-                { key: 13, text : "Wrist", value : 4096 },
-                { key: 14, text : "Wield", value : 8192 },
-                { key: 15, text : "Hold", value : 16384 },
-                { key: 16, text : "Wear Face", value : 32768 },
-            ],
-            specials: [
-                { key : 1, text : "Activate", value : 1 },
-                { key : 2, text : "Twist", value : 2 },
-                { key : 3, text : "Press", value : 4 },
-                { key : 4, text : "Pull", value : 8 },
-                { key : 5, text : "Target", value : 16 },
-                { key : 6, text : "Spell", value : 32 },
-                { key : 7, text : "Transporter", value : 64 },
-                { key : 8, text : "Teleporter", value : 128 },
-                { key : 9, text : "Delay 1", value : 256 },
-                { key : 10, text : "Delay 2", value : 512 },
-                { key : 11, text : "Object", value : 1024 }, 
-                { key : 12, text : "Mobile", value : 2048 },
-                { key : 13, text : "Action", value : 4096 },
-                { key : 14, text : "Morph", value : 8192 },
-            ],
-			affects: [
-				{ text: "STR", value: 1, key: 1 },
-				{ text: "DEX", value: 2, key: 2 },
-				{ text: "INT", value: 3, key: 3 },
-				{ text: "WIS", value: 4, key: 4 },
-				{ text: "CON", value: 5, key: 5 },
-				{ text: "Sex", value: 6, key: 6 },
-				{ text: "Mana", value: 12, key: 12 },
-				{ text: "Hp", value: 13, key: 13 },
-				{ text: "Move", value: 14, key: 14 },
-				{ text: "Gold", value: 15, key: 15 },
-				{ text: "EXP", value: 16, key: 16 },
-				{ text: "Armor", value: 17, key: 17 },
-				{ text: "Hitroll", value: 18, key: 18 },
-				{ text: "Damroll", value: 19, key: 19 },
-				{ text: "SAVING_PARA", value: 20, key: 20 },
-				{ text: "SAVING_ROD", value: 21, key: 21 },
-				{ text: "SAVING_PETRI", value: 22, key: 22 },
-				{ text: "SAVING_BREATH", value: 23, key: 23 },
-				{ text: "SAVING_SPELL", value: 24, key: 24 }
-			]
+            }
         };
 
         this.getObject = this.getObject.bind(this);
@@ -165,7 +85,7 @@ class Objects extends React.Component {
     }
 
     getObjects() {
-        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         let self = this;
         let Objects = [];
         db.transaction(function(tx){
@@ -211,8 +131,7 @@ class Objects extends React.Component {
         }); 
     }
 
-    handleChange(e) {
-        const { name, value } = e.target;
+    handleChange = ( e, { name, value } ) => {
         this.setState(
             prevState => ({
                 object: {
@@ -228,7 +147,7 @@ class Objects extends React.Component {
     getObject(objectId) {
         let self = this;
   
-        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM objects WHERE area_id = '" + self.props.areas.activeArea + "' AND id = '" + objectId + "'", [], function(tx, rs) {
                 if( rs.rows.length ) {
@@ -289,7 +208,7 @@ class Objects extends React.Component {
     saveObject() {
         let self = this;
         console.log("Trying to save");
-        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function(tx){
             tx.executeSql("INSERT INTO objects (name, short_description, description, item_type, extra_flags, wear_flags, value0, value1, value2, value3, weight, cost, affect_data, extra_descr_data, chpoweron, chpoweroff, chpoweruse, victpoweron, victpoweroff, victpoweruse, spectype, specpower, area_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [self.state.object.name, self.state.object.short_description, self.state.object.description, self.state.object.item_type, self.state.object.extra_flags, self.state.object.wear_flags, self.state.object.value0, self.state.object.value1, self.state.object.value2, self.state.object.value3, self.state.object.weight, self.state.object.cost, self.state.object.affect_data, self.state.object.extra_descr_data, self.state.object.chpoweron, self.state.object.chpoweroff, self.state.object.chpoweruse, self.state.object.victpoweron, self.state.object.victpoweroff, self.state.object.victpoweruse, self.state.object.spectype, self.state.object.specpower, self.props.areas.activeArea], function(tx, rs) {
                 self.getObjects();
@@ -305,7 +224,7 @@ class Objects extends React.Component {
     updateObject() {
         let self = this;
         console.log("Trying to save");
-        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function(tx){
             tx.executeSql("UPDATE objects SET name = ?, short_description = ?, description = ?, item_type = ?, extra_flags = ?, wear_flags = ?, value0 = ?, value1 = ?, value2 = ?, value3 = ?, weight = ?, cost = ?, affect_data = ?, extra_descr_data = ?, chpoweron = ?, chpoweroff = ?, chpoweruse = ?, victpoweron = ?, victpoweroff = ?, victpoweruse = ?, spectype = ?, specpower = ? WHERE id = ?", [self.state.object.name, self.state.object.short_description, self.state.object.description, self.state.object.item_type, self.state.object.extra_flags, self.state.object.wear_flags, self.state.object.value0, self.state.object.value1, self.state.object.value2, self.state.object.value3, self.state.object.weight, self.state.object.cost, self.state.object.affect_data, self.state.object.extra_descr_data, self.state.object.chpoweron, self.state.object.chpoweroff, self.state.object.chpoweruse, self.state.object.victpoweron, self.state.object.victpoweroff, self.state.object.victpoweruse, self.state.object.spectype, self.state.object.specpower, self.state.objectId], function(tx, rs) {                self.getObjects();
             }, function(transaction, error) {
@@ -369,7 +288,6 @@ class Objects extends React.Component {
 	}
 
     render() {
-        console.log(this.state);
         return (
             <div className="wrap fade-in">
                 <Segment placeholder>
@@ -410,57 +328,261 @@ class Objects extends React.Component {
 									}
 									
 									<Form>
-										<Form.Group widths='equal'>
-											<Form.Field>
-												<label>Namelist <Popup trigger={<Button icon='help circle' />} content="This is the list of names that your object can be found under. If you don't add it here, it won't show up on locate." /></label>
+										<Form.Group>
+											<Form.Field width={10}>
+												<label>Namelist <Popup trigger={<Button icon='help circle' />} content="This is the list of names that your object can be found under. If you don't add it here, it won't show up on locate. Seperate each keyword by a space - no commas." /></label>
 												<Input name="name"  value={this.state.object.name} placeholder='name' onChange={this.handleChange} />
 											</Form.Field>
-											<Form.Field>
-												<label>Short Description <Popup trigger={<Button icon='help circle' />} content="The string that shows in someone's inventory." /></label>
-												<Input name="short_description"  value={this.state.object.short_description} placeholder="" onChange={this.handleChange} />
+											<Form.Field width={3}>
+												<label>Gold Value</label>
+												<Input name="gold"  value={this.state.object.gold} placeholder="0" onChange={this.handleChange} />
+											</Form.Field>
+											<Form.Field width={3}>
+												<label>Weight</label>
+												<Input name="weight"  value={this.state.object.weight} placeholder="0" onChange={this.handleChange} />
 											</Form.Field>
 										</Form.Group>
+										
+										<Form.Field>
+											<label>Short Description <Popup trigger={<Button icon='help circle' />} content="The string that shows in someone's inventory." /></label>
+											<Input name="short_description"  value={this.state.object.short_description} placeholder="" onChange={this.handleChange} />
+										</Form.Field>
+										
 										<Form.Field>
 											<label>Description <Popup trigger={<Button icon='help circle' />} content="The string that shows up when an item is on the ground, or you look at it." /></label>
 											<Input name="description"  value={this.state.object.description} placeholder="" onChange={this.handleChange} />
 										</Form.Field>
+										
+										<Container>
+											<Header as="h3">Item Type & Stats</Header>
+											<Form.Field>
+												<label>Item Type</label>
+												<Dropdown selection name="item_type" options={config.object.item_types} value={this.state.object.item_type} onChange={this.handleChange} />
+											</Form.Field>
+											{
+												/** Light **/
+												this.state.object.item_type === 1 &&
+												<Form.Group>
+													<Form.Field>
+														<label>Hours</label>
+														<Input name="value2" value={this.state.object.value2} onChange={this.handleChange} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Potion, Pill, Scroll
+												 */( this.state.object.item_type === 2 || this.state.object.item_type === 10 || this.state.object.item_type === 26 ) && 
+												<Form.Group>
+													<Form.Field>
+														<label>Spell Level</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Spell 1</label>
+														<Input name="value1" value={this.state.object.value1} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Spell 2</label>
+														<Input name="value2" value={this.state.object.value2} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Spell 3</label>
+														<Input name="value3" value={this.state.object.value3} onChange={this.handleChange} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Weapon
+												 */
+												(this.state.object.item_type === 3 || this.state.object.item_type === 4) && 
+												<Form.Group>
+													<Form.Field>
+														<label>Level</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Max Charges</label>
+														<Input name="value1" value={this.state.object.value1} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Current Charges</label>
+														<Input name="value2" value={this.state.object.value2} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Spell</label>
+														<Input name="value3" value={this.state.object.value3} onChange={this.handleChange} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Weapon
+												 */
+												this.state.object.item_type === 5 && 
+												<Form.Group>
+													<Form.Field>
+														<label>Spell</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Weapon Type</label>
+														<Dropdown selection name="value3" value={this.state.object.value3} onChange={this.handleChange} options={config.object.weapon_types} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Armor
+												 */
+												this.state.object.item_type === 9 && 
+												<Form.Group>
+													<Form.Field>
+														<label>Spell</label>
+														<Input name="value3" value={this.state.object.value3} onChange={this.handleChange} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Container
+												 */
+												this.state.object.item_type === 15 && 
+												<Form.Group>
+													<Form.Field width={2}>
+														<label>Weight</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field width={6}>
+														<label>Key</label>
+														<Input name="value2" value={this.state.object.value2} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Flags</label>
+														<Dropdown multiple selection name="value1" onChange={this.handleChange} options={[{ value : 1, text: "Closable", key: 1 },{ value : 4, text: "Closed", key: 2 },{ value : 8, text: "Locked", key: 3 },{ value : 2, text: "Pickproof", key: 4 }]} value={this.state.object.value1} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Drink Container
+												 */
+												this.state.object.item_type === 17 && 
+												<Form.Group>
+													<Form.Field width={2}>
+														<label>Max Amount</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field width={6}>
+														<label>Current Amount</label>
+														<Input name="value1" value={this.state.object.value1} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Liquid</label>
+														<Dropdown selection name="value2" onChange={this.handleChange} options={config.object.liquids} value={this.state.object.value2} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Food
+												 */
+												this.state.object.item_type === 19 && 
+												<Form.Group>
+													<Form.Field>
+														<label>Hours Full</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Gold
+												 */
+												this.state.object.item_type === 20 && 
+												<Form.Group>
+													<Form.Field>
+														<label>Gold</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+												</Form.Group>
+											}
+											
+											{
+												/**
+												 * Portal
+												 */
+												this.state.object.item_type === 27 && 
+												<Form.Group>
+													<Form.Field>
+														<label>Destination VNum</label>
+														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Current Value</label>
+														<Input name="value1" value={this.state.object.value1} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Max Value</label>
+														<Input name="value2" value={this.state.object.value2} onChange={this.handleChange} />
+													</Form.Field>
+													<Form.Field>
+														<label>Original VNum</label>
+														<Input name="value3" value={this.state.object.value3} onChange={this.handleChange} />
+													</Form.Field>
+												</Form.Group>
+											}
+										</Container>
+										
 										<Form.Field>
 											<label>Extra Flags</label>
-											<Dropdown label='Extra Flags' name="extra_flags" fluid multiple selection options={this.state.extra_flags} />
+											<Dropdown label='Extra Flags' name="extra_flags" fluid multiple selection options={config.object.extra_flags} value={this.state.object.extra_flags} />
 										</Form.Field>
+										
 										<Form.Field>
 											<label>Wear Flags <Popup trigger={<Button icon='help circle' />} content="If you do not select Take as an option, you will not be able to pick this up no matter what other option you select." /></label>
-											<Dropdown name="wear_flags" fluid multiple selection options={this.state.wear_flags} />
+											<Dropdown name="wear_flags" fluid multiple selection options={config.object.wear_flags} value={this.state.object.wear_flags} /> />
 										</Form.Field>
-										<Form.Field>
-											<label>Specials</label>
-											<Dropdown name="specials" fluid multiple selection options={this.state.specials} />
-										</Form.Field>
+										
 											
 										<Container>
-											<Header as="h3">Extra Descriptions</Header>
+											<Header as="h3">
+												<Button onClick={this.addNewExtras}>Add Extra Desc</Button>
+												Extra Descriptions
+											</Header>
 											{this.state.object.extra_descr_data.map((extra, i) => (
 												<Form.Group key={i}>
 													<Form.Input fluid name="keywords" value={this.state.object.extra_descr_data[i].keywords} label="Keywords" placeholder="keyword" onChange={this.handleExtrasChange(i, "keywords")} />
 													<Form.TextArea rows={1} name="description" label="Description" placeholder="What shows up when someone looks at the keyword?" value={this.state.object.extra_descr_data[i].description} onChange={this.handleExtrasChange(i, "description")} />
 												</Form.Group>
 											))}
-											<Button onClick={this.addNewExtras}>Add Extra Desc</Button>
 										</Container>
 										
 										<Container>
-											<Header as="h3">Affects</Header>
+											<Header as="h3">
+												<Button onClick={this.addNewAffects}>Add Affect</Button> 
+												Affects
+											</Header>
 											{this.state.object.affect_data.map((extra, i) => (
 												<Form.Group key={i}>
 													<Form.Field>
 														<label>Attribute</label>
-														<Dropdown name="location" fluid multiple selection options={this.state.affects} value={this.state.object.affect_data[i].location} onChange={this.handleAffectsChange(i, "location")} />
+														<Dropdown name="location" fluid selection options={config.object.affects} value={this.state.object.affect_data[i].location} onChange={this.handleAffectsChange(i, "location")} />
 													</Form.Field>
 													<Form.Input fluid name="modifier" value={this.state.object.affect_data[i].modifier} label="Amount" placeholder="0" onChange={this.handleExtrasChange(i, "modifier")} />
 												</Form.Group>
 											))}
-											<Button onClick={this.addNewAffects}>Add Affect</Button>
 										</Container>
+										
 										<Form.Button onClick={this.handleSubmit} content={this.state.niceName} />
 									</Form>
 								</div>

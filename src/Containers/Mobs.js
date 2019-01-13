@@ -10,7 +10,6 @@ class Mobs extends React.Component {
 
     constructor(props, context) {
         super(props, context);
-        this.config = config;
 
         this.state = {
             open: false,
@@ -96,7 +95,7 @@ class Mobs extends React.Component {
     }
 
     getMobs() {
-        var db = openDatabase(this.config.dbName, this.config.dbVersion, this.config.dbDescription, this.config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         let self = this;
         let Mobs = [];
 
@@ -187,7 +186,7 @@ class Mobs extends React.Component {
             "sex":  0
         };
 
-        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM mobs WHERE area_id = '" + self.props.areas.activeArea + "' AND id = '" + mobId + "'", [], function(tx, rs) {
                 if( rs.rows.length ) {
@@ -286,7 +285,7 @@ class Mobs extends React.Component {
 
     saveMob() {
         let self = this;
-        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function(tx){
             tx.executeSql("INSERT INTO mobs (vnum, name, short_description, long_description, description, act, affected_by, alignment, level, exp_level, hitroll, damroll, ac, hp, gold, sex, area_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [self.state.mob.vnum, self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, JSON.stringify(self.state.mob.affected_by), self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.props.areas.activeArea], function(tx, rs) {
                 self.props.history.push("/mobs/"+rs.insertId+"/");
@@ -298,7 +297,7 @@ class Mobs extends React.Component {
 
     updateMob() {
         let self = this;
-        var db = openDatabase(config.dbName, config.dbVersion, config.dbDescription, config.dbSize);
+        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
         db.transaction(function(tx){
             tx.executeSql("UPDATE MOBS set name = ?, short_description = ?, long_description = ?, description = ?, act = ?, affected_by = ?,  alignment = ?, level = ?, exp_level = ?, hitroll = ?, damroll = ?, ac = ?, hp = ?, gold = ?, sex = ? WHERE id = ?", [self.state.mob.name, self.state.mob.short_description, self.state.mob.long_description, self.state.mob.description, self.state.mob.act, JSON.stringify(self.state.mob.affected_by), self.state.mob.alignment, self.state.mob.level, self.state.mob.exp_level, self.state.mob.hitroll, self.state.mob.damroll, self.state.mob.ac, self.state.mob.hp, self.state.mob.gold, self.state.mob.sex, self.state.mobId], function(tx, rs) {
                 self.getMobs();
