@@ -8,19 +8,19 @@ self.__precacheManifest = [
     "url": "/vwolc/static/js/runtime~main.99ab24e4.js"
   },
   {
-    "revision": "5ed047d72ba50fd54797",
-    "url": "/vwolc/static/js/main.5ed047d7.chunk.js"
+    "revision": "1b693c3b886ad553e7c4",
+    "url": "/vwolc/static/js/main.1b693c3b.chunk.js"
   },
   {
     "revision": "db23c039bb0f00027443",
     "url": "/vwolc/static/js/1.db23c039.chunk.js"
   },
   {
-    "revision": "5ed047d72ba50fd54797",
+    "revision": "1b693c3b886ad553e7c4",
     "url": "/vwolc/static/css/main.0ef21a5b.chunk.css"
   },
   {
-    "revision": "5e59e53e49d937e73be4a31ee7452333",
+    "revision": "92f1b11387cc5946d6883245312803df",
     "url": "/vwolc/index.html"
   }
 ];
