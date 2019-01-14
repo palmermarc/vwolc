@@ -294,13 +294,11 @@ const config = {
 			{ text: "Air", value: 9, key: 9 },
 			{ text: "Desert", value: 10, key: 10 }
 		],
-		directions: [
-			{ text: "North", value: 0, key: 0 },
-			{ text: "East", value: 1, key: 1 },
-			{ text: "South", value: 2, key: 2 },
-			{ text: "West", value: 3, key: 3 },
-			{ text: "Up", value: 4, key: 4 },
-			{ text: "Down", value: 5, key: 5 }
+		door_flags: [
+			{ text: "Door", value: "", key: 0 },
+			{ text: "Pick Proof", value: "", key: 1 },
+			{ text: "Bash Proof", value: "", key: 2 },
+			{ text: "No Pass Door", value: "", key: 3 },
 		]
 	}
 }

@@ -86,3 +86,14 @@
     background-color: #ff5900;
     text-shadow: 1px 1px 1px #282c34;
 }
+
+.container .segments .segment.exit {
+    padding-top: 75px;
+}
+
+.container .segments .segment.exit .rail .segment {
+    background-color: #ececec;
+    color: #000;
+    font-weight: bold;
+    text-transform: capitalize;
+}

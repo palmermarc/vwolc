@@ -4,7 +4,7 @@ import * as actions from '../_actions/actions.areas';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Segment, Divider, Grid, Form, Message, List, Button, Icon, Header, Container } from 'semantic-ui-react';
+import { Segment, Divider, Grid, Form, Message, List, Button, Icon, Header, Container, Rail, Input, Dropdown } from 'semantic-ui-react';
 import config from '../constants/config';
 
 
@@ -23,10 +23,19 @@ class Areas extends React.Component {
 				description: "",
 				room_flags: [],
 				sector_type: 0,
-				exits: [],
+				exits: [
+					{ keywords: "", description: "" },
+					{ keywords: "", description: "" },
+					{ keywords: "", description: "" },
+					{ keywords: "", description: "" },
+					{ keywords: "", description: "" },
+					{ keywords: "", description: "" },
+				],
 				extra_descr_data: [],
 				roomtext_data: []
-			}, 
+			},
+			directions: ["up", "down", "north", "east", "south", "west" ],
+			exitRooms: []
 		}
 
 		this.handleChange = this.handleChange.bind(this);
@@ -40,6 +49,7 @@ class Areas extends React.Component {
 		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
 		let self = this;
 		let Rooms = [];
+		let exitRooms = [];
 		db.transaction(function(tx){
 			tx.executeSql("SELECT * FROM rooms LIMIT 10000", [], function(tx, rs) {
 				if( rs.rows.length >= 1 ) {
@@ -53,6 +63,12 @@ class Areas extends React.Component {
 							exits: rs.rows[i].exits,
 							extra_descr_data: rs.rows[i].extra_descr_data,
 							roomtext_data: rs.rows[i].roomtext_data
+						});
+						
+						exitRooms.push({
+							key: i,
+							text: rs.rows[i].name,
+							value: rs.rows[i].id
 						});
 					}
 					self.setState({rooms: Rooms});
@@ -285,12 +301,33 @@ class Areas extends React.Component {
 												<Button onClick={this.addNewExits}><Icon name="plus circle" /> Add New</Button>
 												Exits
 											</Header>
-											{this.state.room.exits.map((exit, i) => (
-												<Form.Group key={i}>
-													<Form.Dropdown label="Direction" name="door" fluid selection options={config.rooms.directions} value={this.state.room.exits[i].door}   />
-													<Form.TextArea rows={1} name="description" label="Description" placeholder="What shows up when someone looks at the keyword?" value={this.state.room.extra_descr_data[i].description} onChange={this.handleExtrasChange(i, "description")} />
-												</Form.Group>
-											))}
+											<Segment.Group raised>
+												{this.state.directions.map((direction, i) => (
+													<Segment className="exit" key={"exit-"+i}>
+														<Header as='h3' block>{direction}</Header>
+														<Form.Group>
+															<Form.Field>
+																<label>Exit Room</label>
+																<Dropdown selection options={this.state.exitRooms} value={this.state.room.exits[i].vnum} />
+															</Form.Field>
+															<Form.Field>
+																<label>&nbsp;</label>
+																<Dropdown selection multiple value={this.state.room.exits[i].door_flags} options={config.rooms.door_flags} />
+															</Form.Field>
+														</Form.Group>
+														<Form.Group>
+															<Form.Field width={4}>
+																<label>Keywords</label>
+																<Input name="keywords" value={this.state.room.exits[i].keywords} />
+															</Form.Field>
+															<Form.Field width={12}>
+																<label>Description</label>
+																<Input name="description" value={this.state.room.exits[i].description} />
+															</Form.Field>
+														</Form.Group>
+													</Segment>
+												))}
+											</Segment.Group>
 											
 										</Container>
 										
