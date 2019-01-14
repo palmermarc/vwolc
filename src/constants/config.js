@@ -299,7 +299,16 @@ const config = {
 			{ text: "Pick Proof", value: "", key: 1 },
 			{ text: "Bash Proof", value: "", key: 2 },
 			{ text: "No Pass Door", value: "", key: 3 },
-		]
+		],
+		exit_info_flags: [
+			{ text: "Door", value: 1, key: 0 },
+			{ text: "Closed", value: 2, key: 1 },
+			{ text: "Locked", value: 4, key: 2 },
+			{ text: "Bashed", value: 8, key: 3 },
+			{ text: "Bash-Proof", value: 16, key: 4 },
+			{ text: "Pick-Proof", value: 32, key: 5 },
+			{ text: "No Pass Door", value: 64, key: 6 },
+		],
 	}
 }
 

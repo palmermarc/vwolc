@@ -24,12 +24,12 @@ class Areas extends React.Component {
 				room_flags: [],
 				sector_type: 0,
 				exits: [
-					{ keywords: "", description: "" },
-					{ keywords: "", description: "" },
-					{ keywords: "", description: "" },
-					{ keywords: "", description: "" },
-					{ keywords: "", description: "" },
-					{ keywords: "", description: "" },
+					{ keywords: "", description: "", exit_info: [], vnum: 0, door: 0, key: 0 },
+					{ keywords: "", description: "", exit_info: [], vnum: 0, door: 1, key: 0 },
+					{ keywords: "", description: "", exit_info: [], vnum: 0, door: 2, key: 0 },
+					{ keywords: "", description: "", exit_info: [], vnum: 0, door: 3, key: 0 },
+					{ keywords: "", description: "", exit_info: [], vnum: 0, door: 4, key: 0 },
+					{ keywords: "", description: "", exit_info: [], vnum: 0, door: 5, key: 0 },
 				],
 				extra_descr_data: [],
 				roomtext_data: []
@@ -306,13 +306,13 @@ class Areas extends React.Component {
 													<Segment className="exit" key={"exit-"+i}>
 														<Header as='h3' block>{direction}</Header>
 														<Form.Group>
-															<Form.Field>
+															<Form.Field width={6}>
 																<label>Exit Room</label>
 																<Dropdown selection options={this.state.exitRooms} value={this.state.room.exits[i].vnum} />
 															</Form.Field>
-															<Form.Field>
+															<Form.Field width={10}>
 																<label>&nbsp;</label>
-																<Dropdown selection multiple value={this.state.room.exits[i].door_flags} options={config.rooms.door_flags} />
+																<Dropdown selection multiple value={this.state.room.exits[i].exit_info} options={config.rooms.exit_info_flags} />
 															</Form.Field>
 														</Form.Group>
 														<Form.Group>
