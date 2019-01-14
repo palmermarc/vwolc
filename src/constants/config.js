@@ -107,10 +107,120 @@ const config = {
 			{ text: "Pill", value: 26, key: 20 },
 			{ text: "Portal", value: 27, key: 21 }
 		],
-		spells: [
-		
+		spells: [ 
+			{key: 1, value: 1, text: "acid blast" }, 
+			{key: 2, value: 2, text: "armor" }, 
+			{key: 3, value: 3, text: "bless" }, 
+			{key: 4, value: 4, text: "blindness" }, 
+			{key: 5, value: 5, text: "burning hands" }, 
+			{key: 6, value: 6, text: "call lightning" }, 
+			{key: 7, value: 7, text: "cause critical" }, 
+			{key: 8, value: 8, text: "cause light" }, 
+			{key: 9, value: 9, text: "cause serious" }, 
+			{key: 10, value: 10, text: "change sex" }, 
+			{key: 11, value: 11, text: "charm person" }, 
+			{key: 12, value: 12, text: "chill touch" }, 
+			{key: 13, value: 13, text: "colour spray" }, 
+			{key: 14, value: 14, text: "continual light" }, 
+			{key: 15, value: 15, text: "control weather" }, 
+			{key: 16, value: 16, text: "create food" }, 
+			{key: 17, value: 17, text: "create spring" }, 
+			{key: 18, value: 18, text: "create water" }, 
+			{key: 19, value: 19, text: "cure blindness" }, 
+			{key: 20, value: 20, text: "cure critical" }, 
+			{key: 21, value: 21, text: "cure light" }, 
+			{key: 22, value: 22, text: "cure poison" }, 
+			{key: 23, value: 23, text: "cure serious" }, 
+			{key: 24, value: 24, text: "curse" }, 
+			{key: 25, value: 25, text: "detect evil" }, 
+			{key: 26, value: 26, text: "detect hidden" }, 
+			{key: 27, value: 27, text: "detect invis" }, 
+			{key: 28, value: 28, text: "detect magic" }, 
+			{key: 29, value: 29, text: "detect poison" }, 
+			{key: 30, value: 30, text: "dispel evil" }, 
+			{key: 31, value: 31, text: "dispel magic" }, 
+			{key: 32, value: 32, text: "earthquake" }, 
+			{key: 33, value: 33, text: "enchant weapon" }, 
+			{key: 34, value: 34, text: "energy drain" }, 
+			{key: 35, value: 35, text: "faerie fire" }, 
+			{key: 36, value: 36, text: "faerie fog" }, 
+			{key: 37, value: 37, text: "fireball" }, 
+			{key: 38, value: 38, text: "flamestrike" }, 
+			{key: 39, value: 39, text: "fly" }, 
+			{key: 40, value: 40, text: "gate" }, 
+			{key: 41, value: 41, text: "giant strength" }, 
+			{key: 42, value: 42, text: "harm" }, 
+			{key: 43, value: 43, text: "heal" }, 
+			{key: 44, value: 44, text: "identify" }, 
+			{key: 45, value: 45, text: "infravision" }, 
+			{key: 46, value: 46, text: "invis" }, 
+			{key: 47, value: 47, text: "know alignment" }, 
+			{key: 48, value: 48, text: "lightning bolt" }, 
+			{key: 49, value: 49, text: "locate object" }, 
+			{key: 50, value: 50, text: "magic missile" }, 
+			{key: 51, value: 51, text: "mass invis" }, 
+			{key: 52, value: 52, text: "pass door" }, 
+			{key: 53, value: 53, text: "poison" }, 
+			{key: 54, value: 54, text: "protection" }, 
+			{key: 55, value: 55, text: "refresh" }, 
+			{key: 56, value: 56, text: "remove curse" }, 
+			{key: 57, value: 57, text: "sanctuary" }, 
+			{key: 58, value: 58, text: "shield" }, 
+			{key: 59, value: 59, text: "shocking grasp" }, 
+			{key: 60, value: 60, text: "sleep" }, 
+			{key: 61, value: 61, text: "stone skin" }, 
+			{key: 62, value: 62, text: "summon" }, 
+			{key: 63, value: 63, text: "teleport" }, 
+			{key: 64, value: 64, text: "ventriloquate" }, 
+			{key: 65, value: 65, text: "weaken" }, 
+			{key: 66, value: 66, text: "word of recall" }, 
+			{key: 67, value: 67, text: "acid breath" }, 
+			{key: 68, value: 68, text: "fire breath" }, 
+			{key: 69, value: 69, text: "frost breath" }, 
+			{key: 70, value: 70, text: "gas breath" }, 
+			{key: 71, value: 71, text: "lightning breath" }, 
+			{key: 72, value: 72, text: "backstab" }, 
+			{key: 73, value: 73, text: "disarm" }, 
+			{key: 74, value: 74, text: "hide" }, 
+			{key: 75, value: 75, text: "hurl" }, 
+			{key: 76, value: 76, text: "kick" }, 
+			{key: 77, value: 77, text: "peek" }, 
+			{key: 78, value: 78, text: "pick lock" }, 
+			{key: 79, value: 79, text: "rescue" }, 
+			{key: 80, value: 80, text: "sneak" }, 
+			{key: 81, value: 81, text: "steal" }, 
+			{key: 82, value: 82, text: "general purpose" }, 
+			{key: 83, value: 83, text: "high explosive" }, 
+			{key: 84, value: 84, text: "guardian" }, 
+			{key: 85, value: 85, text: "soulblade" }, 
+			{key: 86, value: 86, text: "mana" }, 
+			{key: 87, value: 87, text: "frenzy" }, 
+			{key: 88, value: 88, text: "darkblessing" }, 
+			{key: 89, value: 89, text: "portal" }, 
+			{key: 90, value: 90, text: "energyflux" }, 
+			{key: 91, value: 91, text: "voodoo" }, 
+			{key: 92, value: 92, text: "transport" }, 
+			{key: 93, value: 93, text: "regenerate" }, 
+			{key: 94, value: 94, text: "clot" }, 
+			{key: 95, value: 95, text: "mend" }, 
+			{key: 96, value: 96, text: "punch" }, 
+			{key: 97, value: 97, text: "quest" }, 
+			{key: 98, value: 98, text: "minor creation" }, 
+			{key: 99, value: 99, text: "brew" }, 
+			{key: 100, value: 100, text: "scribe" }, 
+			{key: 101, value: 101, text: "carve" }, 
+			{key: 102, value: 102, text: "engrave" }, 
+			{key: 103, value: 103, text: "bake" }, 
+			{key: 104, value: 104, text: "mount" }, 
+			{key: 105, value: 105, text: "berserk" }, 
+			{key: 106, value: 106, text: "fastdraw" }, 
+			{key: 107, value: 107, text: "hunt" }, 
+			{key: 108, value: 108, text: "scan" }, 
+			{key: 109, value: 109, text: "repair" }, 
+			{key: 110, value: 110, text: "spellproof" }, 
+			{key: 111, value: 111, text: "clone" }, 
+			{key: 112, value: 112, text: "reveal" }
 		],
-
 		weapon_spells: [
 			/*
 			
@@ -148,28 +258,51 @@ const config = {
 			{ text: "blood", value: 13, key: 13 },
 			{ text: "saltwater", value: 14, key: 14 },
 		],
+	},
+	rooms: {
+		flags: [
+			{ text: "Dark", value: 1, key: 0 },
+			{ text: "Sacred", value: 2, key: 1 },
+			{ text: "No Mob", value: 4, key: 2 },
+			{ text: "Indoors", value: 8, key: 3 },
+			{ text: "Quiet", value: 16, key: 4 },
+			{ text: "No Shadowplane", value: 32, key: 5 },
+			{ text: "No Spell", value: 64, key: 6 },
+			{ text: "No Claim Or Call", value: 128, key: 7 },
+			{ text: "Bank", value: 256, key: 8 },
+			{ text: "Private", value: 512, key: 9 },
+			{ text: "Safe", value: 1024, key: 10 },
+			{ text: "Solitary", value: 2048, key: 11 },
+			{ text: "No Recall", value: 8192, key: 12 },
+			{ text: "Cone of Silence", value: 16384, key: 13 },
+			{ text: "No Teleport", value: 32768, key: 14 },
+			{ text: "No Mist", value: 65536, key: 15 },
+			{ text: "No Transport", value: 131072, key: 16 },
+			{ text: "No Escape", value: 262144, key: 17 },
+			{ text: "No Home", value: 524288, key: 18 },
+			{ text: "No Summon", value: 1048576, key: 19 }
+		],
+		sectors: [
+			{ text: "Inside", value: 0, key: 0 },
+			{ text: "City", value: 1, key: 1 },
+			{ text: "Field", value: 2, key: 2 },
+			{ text: "Forest", value: 3, key: 3 },
+			{ text: "Hills", value: 4, key: 4 },
+			{ text: "Mountain", value: 5, key: 5 },
+			{ text: "Water (Swim)", value: 6, key: 6 },
+			{ text: "Water (Noswim)", value: 7, key: 7 },
+			{ text: "Air", value: 9, key: 9 },
+			{ text: "Desert", value: 10, key: 10 }
+		],
+		directions: [
+			{ text: "North", value: 0, key: 0 },
+			{ text: "East", value: 1, key: 1 },
+			{ text: "South", value: 2, key: 2 },
+			{ text: "West", value: 3, key: 3 },
+			{ text: "Up", value: 4, key: 4 },
+			{ text: "Down", value: 5, key: 5 }
+		]
 	}
 }
 
 export default config;
-
-
-
-/*
-defensive spells
-Infravision
-See Invis
-Fly
-Blind
-Invis
-Passdoor
-Protection
-Sanctuary
-Sneak
-Shock Shield
-Fire Shield
-Ice Shield
-Acid Shield
-
-
-*/

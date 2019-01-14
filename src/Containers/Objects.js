@@ -381,15 +381,15 @@ class Objects extends React.Component {
 													</Form.Field>
 													<Form.Field>
 														<label>Spell 1</label>
-														<Input name="value1" value={this.state.object.value1} onChange={this.handleChange} />
+														<Dropdown selection name="value1" value={this.state.object.value1} onChange={this.handleChange} options={config.object.spells} />
 													</Form.Field>
 													<Form.Field>
 														<label>Spell 2</label>
-														<Input name="value2" value={this.state.object.value2} onChange={this.handleChange} />
+														<Dropdown selection name="value2" value={this.state.object.value2} onChange={this.handleChange} options={config.object.spells} />
 													</Form.Field>
 													<Form.Field>
 														<label>Spell 3</label>
-														<Input name="value3" value={this.state.object.value3} onChange={this.handleChange} />
+														<Dropdown selection name="value3" value={this.state.object.value3} onChange={this.handleChange} options={config.object.spells} />
 													</Form.Field>
 												</Form.Group>
 											}
@@ -414,7 +414,7 @@ class Objects extends React.Component {
 													</Form.Field>
 													<Form.Field>
 														<label>Spell</label>
-														<Input name="value3" value={this.state.object.value3} onChange={this.handleChange} />
+														<Dropdown selection name="value3" value={this.state.object.value3} onChange={this.handleChange} options={config.object.spells} />
 													</Form.Field>
 												</Form.Group>
 											}
@@ -427,7 +427,7 @@ class Objects extends React.Component {
 												<Form.Group>
 													<Form.Field>
 														<label>Spell</label>
-														<Input name="value0" value={this.state.object.value0} onChange={this.handleChange} />
+														<Dropdown selection name="value0" value={this.state.object.value0} onChange={this.handleChange} options={config.object.spells} />
 													</Form.Field>
 													<Form.Field>
 														<label>Weapon Type</label>
@@ -444,7 +444,7 @@ class Objects extends React.Component {
 												<Form.Group>
 													<Form.Field>
 														<label>Spell</label>
-														<Input name="value3" value={this.state.object.value3} onChange={this.handleChange} />
+														<Dropdown selection name="value3" value={this.state.object.value3} onChange={this.handleChange} options={config.object.spells} />
 													</Form.Field>
 												</Form.Group>
 											}
@@ -556,7 +556,7 @@ class Objects extends React.Component {
 											
 										<Container>
 											<Header as="h3">
-												<Button onClick={this.addNewExtras}>Add Extra Desc</Button>
+												<Button onClick={this.addNewExtras}><Icon name="plus circle" />Add New</Button>
 												Extra Descriptions
 											</Header>
 											{this.state.object.extra_descr_data.map((extra, i) => (
@@ -569,7 +569,7 @@ class Objects extends React.Component {
 										
 										<Container>
 											<Header as="h3">
-												<Button onClick={this.addNewAffects}>Add Affect</Button> 
+												<Button onClick={this.addNewAffects}><Icon name="plus circle" />Add New</Button> 
 												Affects
 											</Header>
 											{this.state.object.affect_data.map((extra, i) => (

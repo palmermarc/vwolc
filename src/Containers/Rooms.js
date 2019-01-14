@@ -27,54 +27,13 @@ class Areas extends React.Component {
 				extra_descr_data: [],
 				roomtext_data: []
 			}, 
-			room_flags: [
-				{ text: "Dark", value: 1, key: 0 },
-				{ text: "Sacred", value: 2, key: 1 },
-				{ text: "No Mob", value: 4, key: 2 },
-				{ text: "Indoors", value: 8, key: 3 },
-				{ text: "Quiet", value: 16, key: 4 },
-				{ text: "No Shadowplane", value: 32, key: 5 },
-				{ text: "No Spell", value: 64, key: 6 },
-				{ text: "No Claim Or Call", value: 128, key: 7 },
-				{ text: "Bank", value: 256, key: 8 },
-				{ text: "Private", value: 512, key: 9 },
-				{ text: "Safe", value: 1024, key: 10 },
-				{ text: "Solitary", value: 2048, key: 11 },
-				{ text: "No Recall", value: 8192, key: 12 },
-				{ text: "Cone of Silence", value: 16384, key: 13 },
-				{ text: "No Teleport", value: 32768, key: 14 },
-				{ text: "No Mist", value: 65536, key: 15 },
-				{ text: "No Transport", value: 131072, key: 16 },
-				{ text: "No Escape", value: 262144, key: 17 },
-				{ text: "No Home", value: 524288, key: 18 },
-				{ text: "No Summon", value: 1048576, key: 19 }
-			],
-			room_sectors: [
-				{ text: "Inside", value: 0, key: 0 },
-				{ text: "City", value: 1, key: 1 },
-				{ text: "Field", value: 2, key: 2 },
-				{ text: "Forest", value: 3, key: 3 },
-				{ text: "Hills", value: 4, key: 4 },
-				{ text: "Mountain", value: 5, key: 5 },
-				{ text: "Water (Swim)", value: 6, key: 6 },
-				{ text: "Water (Noswim)", value: 7, key: 7 },
-				{ text: "Air", value: 9, key: 9 },
-				{ text: "Desert", value: 10, key: 10 }
-			],
-			room_directions: [
-				{ text: "North", value: 0, key: 0 },
-				{ text: "East", value: 1, key: 1 },
-				{ text: "South", value: 2, key: 2 },
-				{ text: "West", value: 3, key: 3 },
-				{ text: "Up", value: 4, key: 4 },
-				{ text: "Down", value: 5, key: 5 }
-			]
 		}
 
 		this.handleChange = this.handleChange.bind(this);
 		this.getRooms = this.getRooms.bind(this);
 		this.getRoom = this.getRoom.bind(this);
 		this.addNewExtras = this.addNewExtras.bind(this);
+		this.addNewExits = this.addNewExits.bind(this);
 	}
 
 	getRooms() {
@@ -242,7 +201,7 @@ class Areas extends React.Component {
 			prevState => ({
 				room: {
 					...prevState.room,
-					exits: this.state.room.exits.concat([{ keywords: '', description: '' }])
+					exits: this.state.room.exits.concat([{ door: 0, vnum: 0, description: "", keyword: "", key: 0, exit_info: 0 }])
 				}
 			})	
 		);
@@ -306,27 +265,33 @@ class Areas extends React.Component {
 									<Form>
 										<Form.Input fluid name="name" value={this.state.room.name} label="Room Name" placeholder="Room Name Here" onChange={this.handleChange} />
 										<Form.TextArea name="description" label='Look' placeholder='The mob looks back at you!' value={this.state.room.description} onChange={this.handleChange} />
-										<Form.Dropdown label="Room Flags" name="room_flags" fluid multiple selection options={this.state.room_flags} value={this.state.room.room_flags} onChange={(e,{value}) => this.setState(prevState => ({room: {...prevState.room, room_flags: [...value]}}))}   />
-										<Form.Dropdown label="Room Sector" name="sector_type" fluid selection options={this.state.room_sectors} value={this.state.room.sector_type} onChange={this.handleChange}   />
+										<Form.Dropdown label="Room Flags" name="room_flags" fluid multiple selection options={config.rooms.flags} value={this.state.room.room_flags} onChange={(e,{value}) => this.setState(prevState => ({room: {...prevState.room, room_flags: [...value]}}))}   />
+										<Form.Dropdown label="Room Sector" name="sector_type" fluid selection options={config.rooms.sectors} value={this.state.room.sector_type} onChange={this.handleChange}   />
 										<Container>
-											<Header as="h3">Extra Room Descriptions</Header>
+											<Header as="h3">
+												<Button onClick={this.addNewExtras}><Icon name="plus circle" />Add New</Button>
+												Extra Room Descriptions
+											</Header>
 											{this.state.room.extra_descr_data.map((extra, i) => (
 												<Form.Group key={i}>
 													<Form.Input fluid name="keywords" value={this.state.room.extra_descr_data[i].keywords} label="Keywords" placeholder="keyword" onChange={this.handleExtrasChange(i, "keywords")} />
 													<Form.TextArea rows={1} name="description" label="Description" placeholder="What shows up when someone looks at the keyword?" value={this.state.room.extra_descr_data[i].description} onChange={this.handleExtrasChange(i, "description")} />
 												</Form.Group>
 											))}
-											<Button onClick={this.addNewExtras}>Add New Extra Room Desc</Button>
 										</Container>
+										
 										<Container>
-											<Header as="h3">Exits</Header>
+											<Header as="h3">
+												<Button onClick={this.addNewExits}><Icon name="plus circle" /> Add New</Button>
+												Exits
+											</Header>
 											{this.state.room.exits.map((exit, i) => (
 												<Form.Group key={i}>
-													<Form.Dropdown label="Direction" name="door" fluid selection options={this.state.room_directions} value={this.state.room.exits[i].door}   />
+													<Form.Dropdown label="Direction" name="door" fluid selection options={config.rooms.directions} value={this.state.room.exits[i].door}   />
 													<Form.TextArea rows={1} name="description" label="Description" placeholder="What shows up when someone looks at the keyword?" value={this.state.room.extra_descr_data[i].description} onChange={this.handleExtrasChange(i, "description")} />
 												</Form.Group>
 											))}
-											<Button onClick={this.addNewExits}>Add New Extra Room Desc</Button>
+											
 										</Container>
 										
 										<Form.Button onClick={this.handleSubmit} color="black" content={this.state.niceName} />
