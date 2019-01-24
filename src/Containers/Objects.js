@@ -7,151 +7,151 @@ import config from '../constants/config';
 
 class Objects extends React.Component {
 
-    constructor(props, context) {
-        super(props, context);
+	constructor(props, context) {
+		super(props, context);
 
-        var selectedArea = localStorage.getItem('selectedArea');
-        if (selectedArea === null) { selectedArea = 0; }
+		var selectedArea = localStorage.getItem('selectedArea');
+		if (selectedArea === null) { selectedArea = 0; }
 
-        this.state = {
-            selectedArea: selectedArea,
-            errors: [],
-            objectId: 0,
-            niceName: "Create Object",
-            objects: [{
-                id:	0,
-                name: "first object areaname",
-                short_description: "my first object",
-                description: "This is my first object. Ain't it perty?",
-            }],
-            object: {
-                id: 0,
-                name: "",
-                short_description: "",
-                description: "",
-                item_type:  0,
-                extra_flags: [],
-                wear_flags: [],
-                value0: 0,
-                value1: 0,
-                value2: 0,
-                value3: 0,
-                weight: 0,
-                cost:   0,
-                affect_data: [],
-                extra_descr_data: [],
-                chpoweron: "",
-                chpoweroff: "",
-                chpoweruse: "",
-                victpoweron: "",
-                victpoweroff: "",
-                victpoweruse: "",
-                spectype: 0,
-                specpower: 0
-            }
-        };
+		this.state = {
+			selectedArea: selectedArea,
+			errors: [],
+			objectId: 0,
+			niceName: "Create Object",
+			objects: [{
+				id:	0,
+				name: "first object areaname",
+				short_description: "my first object",
+				description: "This is my first object. Ain't it perty?",
+			}],
+			object: {
+				id: 0,
+				name: "",
+				short_description: "",
+				description: "",
+				item_type:  0,
+				extra_flags: [],
+				wear_flags: [],
+				value0: 0,
+				value1: 0,
+				value2: 0,
+				value3: 0,
+				weight: 0,
+				cost:   0,
+				affect_data: [],
+				extra_descr_data: [],
+				chpoweron: "",
+				chpoweroff: "",
+				chpoweruse: "",
+				victpoweron: "",
+				victpoweroff: "",
+				victpoweruse: "",
+				spectype: 0,
+				specpower: 0
+			}
+		};
 
-        this.getObject = this.getObject.bind(this);
-        this.getObjects = this.getObjects.bind(this);
-        this.saveObject = this.saveObject.bind(this);
-        this.updateObject = this.updateObject.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+		this.getObject = this.getObject.bind(this);
+		this.getObjects = this.getObjects.bind(this);
+		this.saveObject = this.saveObject.bind(this);
+		this.updateObject = this.updateObject.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 		this.addNewExtras = this.addNewExtras.bind(this);
 		this.addNewAffects = this.addNewAffects.bind(this);
-    }
+	}
 
-    componentDidMount() {
-        // Call API
-        this.getObjects();
+	componentDidMount() {
+		// Call API
+		this.getObjects();
 
-        if( typeof this.props.match.params.objectId !== "undefined" ) {
-            this.setState({ objectId: this.props.match.params.objectId, niceName: "Update Object" });
-            this.getObject(this.props.match.params.objectId);        }
+		if( typeof this.props.match.params.objectId !== "undefined" ) {
+			this.setState({ objectId: this.props.match.params.objectId, niceName: "Update Object" });
+			this.getObject(this.props.match.params.objectId);		}
 
-        document.title = this.state.niceName;
-    }
+		document.title = this.state.niceName;
+	}
 
-    componentWillReceiveProps () {
-        // Call API
-        this.getObjects();
+	componentWillReceiveProps () {
+		// Call API
+		this.getObjects();
 
-        if( typeof this.props.match.params.objectId !== "undefined" ) {
-            this.setState({ objectId: this.props.match.params.objectId, niceName: "Update Object" });
-            this.getObject(this.props.match.params.objectId);
-        }
+		if( typeof this.props.match.params.objectId !== "undefined" ) {
+			this.setState({ objectId: this.props.match.params.objectId, niceName: "Update Object" });
+			this.getObject(this.props.match.params.objectId);
+		}
 
-        document.title = this.state.niceName;
-    }
+		document.title = this.state.niceName;
+	}
 
-    getObjects() {
-        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-        let self = this;
-        let Objects = [];
-        db.transaction(function(tx){
-            tx.executeSql("SELECT * FROM objects WHERE area_id = ? LIMIT 10000", [self.props.areas.activeArea], function(tx, rs) {
-                if( rs.rows.length >= 1 ) {
-                    for( var i=0; i<rs.rows.length; i++ ) {
-                        Objects.push({
-                            id: rs.rows[i].id,
-                            name: rs.rows[i].name,
-                            short_description: rs.rows[i].short_description,
-                            description: rs.rows[i].description,
-                            item_type: rs.rows[i].item_type,
-                            extra_flags: rs.rows[i].extra_flags,
-                            wear_flags: rs.rows[i].wear_flags,
-                            value0: rs.rows[i].value0,
-                            value1: rs.rows[i].value1,
-                            value2: rs.rows[i].value2,
-                            value3: rs.rows[i].value3,
-                            weight: rs.rows[i].weight,
-                            cost: rs.rows[i].cost,
-                            affect_data: rs.rows[i].affect_data,
-                            extra_descr_data: rs.rows[i].extra_descr_data,
-                            chpoweron: rs.rows[i].chpoweron,
-                            chpoweroff: rs.rows[i].chpoweroff,
-                            chpoweruse: rs.rows[i].chpoweruse,
-                            victpoweron: rs.rows[i].victpoweron,
-                            victpoweroff: rs.rows[i].victpoweroff,
-                            victpoweruse: rs.rows[i].victpoweruse,
-                            spectype: rs.rows[i].spectype,
-                            specpower: rs.rows[i].specpower,
-                        });
-                    }
-                } else {
-                    Objects = [{
-                        id : 0,
-                        name : "first mob areaname",
-                        short_description : "my first mob",
-                        long_description : "This is my first mob. Ain't it perty?",
-                    }]
-                }
-                self.setState({objects: Objects});
-            })
-        }); 
-    }
+	getObjects() {
+		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
+		let self = this;
+		let Objects = [];
+		db.transaction(function(tx){
+			tx.executeSql("SELECT * FROM objects WHERE area_id = ? LIMIT 10000", [self.props.areas.activeArea], function(tx, rs) {
+				if( rs.rows.length >= 1 ) {
+					for( var i=0; i<rs.rows.length; i++ ) {
+						Objects.push({
+							id: rs.rows[i].id,
+							name: rs.rows[i].name,
+							short_description: rs.rows[i].short_description,
+							description: rs.rows[i].description,
+							item_type: rs.rows[i].item_type,
+							extra_flags: rs.rows[i].extra_flags,
+							wear_flags: rs.rows[i].wear_flags,
+							value0: rs.rows[i].value0,
+							value1: rs.rows[i].value1,
+							value2: rs.rows[i].value2,
+							value3: rs.rows[i].value3,
+							weight: rs.rows[i].weight,
+							cost: rs.rows[i].cost,
+							affect_data: rs.rows[i].affect_data,
+							extra_descr_data: rs.rows[i].extra_descr_data,
+							chpoweron: rs.rows[i].chpoweron,
+							chpoweroff: rs.rows[i].chpoweroff,
+							chpoweruse: rs.rows[i].chpoweruse,
+							victpoweron: rs.rows[i].victpoweron,
+							victpoweroff: rs.rows[i].victpoweroff,
+							victpoweruse: rs.rows[i].victpoweruse,
+							spectype: rs.rows[i].spectype,
+							specpower: rs.rows[i].specpower,
+						});
+					}
+				} else {
+					Objects = [{
+						id : 0,
+						name : "first mob areaname",
+						short_description : "my first mob",
+						long_description : "This is my first mob. Ain't it perty?",
+					}]
+				}
+				self.setState({objects: Objects});
+			})
+		}); 
+	}
 
-    handleChange = ( e, { name, value } ) => {
-        this.setState(
-            prevState => ({
-                object: {
-                    ...prevState.object,
-                    [name] : value                
-                }
-            })
-        );
-           
-        this.setState({unsaved: true});
-    }
+	handleChange = ( e, { name, value } ) => {
+		this.setState(
+			prevState => ({
+				object: {
+					...prevState.object,
+					[name] : value				
+				}
+			})
+		);
+		   
+		this.setState({unsaved: true});
+	}
 
-    getObject(objectId) {
-        let self = this;
+	getObject(objectId) {
+		let self = this;
   
-        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-        db.transaction(function(tx){
-            tx.executeSql("SELECT * FROM objects WHERE area_id = '" + self.props.areas.activeArea + "' AND id = '" + objectId + "'", [], function(tx, rs) {
-                if( rs.rows.length ) {
-                    let object = rs.rows[0];
+		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
+		db.transaction(function(tx){
+			tx.executeSql("SELECT * FROM objects WHERE area_id = '" + self.props.areas.activeArea + "' AND id = '" + objectId + "'", [], function(tx, rs) {
+				if( rs.rows.length ) {
+					let object = rs.rows[0];
 					
 					self.setState({
 						object: {
@@ -180,58 +180,58 @@ class Objects extends React.Component {
 							specpower: object.specpower
 						}
 					});
-                }
-            }, function(error) {
-                console.log(error);
-            });
-        });
-    }
+				}
+			}, function(error) {
+				console.log(error);
+			});
+		});
+	}
 
-    handleSubmit = () => {
-        console.log(this.state.object);
-        // let self = this;
+	handleSubmit = () => {
+		console.log(this.state.object);
+		// let self = this;
 
-        let errors = [];
+		let errors = [];
 
-        this.setState( { errors: errors } );
-        
-        if( errors.length === 0 ) {
-            if( this.state.objectId === 0 ) {
-                this.saveObject();
-            }
-            else {   
-                this.updateObject();
-            }
-        }
-    }
+		this.setState( { errors: errors } );
+		
+		if( errors.length === 0 ) {
+			if( this.state.objectId === 0 ) {
+				this.saveObject();
+			}
+			else {   
+				this.updateObject();
+			}
+		}
+	}
 
-    saveObject() {
-        let self = this;
-        console.log("Trying to save");
-        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-        db.transaction(function(tx){
-            tx.executeSql("INSERT INTO objects (name, short_description, description, item_type, extra_flags, wear_flags, value0, value1, value2, value3, weight, cost, affect_data, extra_descr_data, chpoweron, chpoweroff, chpoweruse, victpoweron, victpoweroff, victpoweruse, spectype, specpower, area_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [self.state.object.name, self.state.object.short_description, self.state.object.description, self.state.object.item_type, self.state.object.extra_flags, self.state.object.wear_flags, self.state.object.value0, self.state.object.value1, self.state.object.value2, self.state.object.value3, self.state.object.weight, self.state.object.cost, self.state.object.affect_data, self.state.object.extra_descr_data, self.state.object.chpoweron, self.state.object.chpoweroff, self.state.object.chpoweruse, self.state.object.victpoweron, self.state.object.victpoweroff, self.state.object.victpoweruse, self.state.object.spectype, self.state.object.specpower, self.props.areas.activeArea], function(tx, rs) {
-                self.getObjects();
-                console.log(tx);
-                console.log(rs);
-                self.props.history.push("/objects/"+rs.insertId+"/");
-            }, function(transaction, error) {
-                console.log(error.message);
-            });
-        });
-    }
+	saveObject() {
+		let self = this;
+		console.log("Trying to save");
+		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
+		db.transaction(function(tx){
+			tx.executeSql("INSERT INTO objects (name, short_description, description, item_type, extra_flags, wear_flags, value0, value1, value2, value3, weight, cost, affect_data, extra_descr_data, chpoweron, chpoweroff, chpoweruse, victpoweron, victpoweroff, victpoweruse, spectype, specpower, area_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", [self.state.object.name, self.state.object.short_description, self.state.object.description, self.state.object.item_type, self.state.object.extra_flags, self.state.object.wear_flags, self.state.object.value0, self.state.object.value1, self.state.object.value2, self.state.object.value3, self.state.object.weight, self.state.object.cost, self.state.object.affect_data, self.state.object.extra_descr_data, self.state.object.chpoweron, self.state.object.chpoweroff, self.state.object.chpoweruse, self.state.object.victpoweron, self.state.object.victpoweroff, self.state.object.victpoweruse, self.state.object.spectype, self.state.object.specpower, self.props.areas.activeArea], function(tx, rs) {
+				self.getObjects();
+				console.log(tx);
+				console.log(rs);
+				self.props.history.push("/objects/"+rs.insertId+"/");
+			}, function(transaction, error) {
+				console.log(error.message);
+			});
+		});
+	}
 
-    updateObject() {
-        let self = this;
-        console.log("Trying to save");
-        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-        db.transaction(function(tx){
-            tx.executeSql("UPDATE objects SET name = ?, short_description = ?, description = ?, item_type = ?, extra_flags = ?, wear_flags = ?, value0 = ?, value1 = ?, value2 = ?, value3 = ?, weight = ?, cost = ?, affect_data = ?, extra_descr_data = ?, chpoweron = ?, chpoweroff = ?, chpoweruse = ?, victpoweron = ?, victpoweroff = ?, victpoweruse = ?, spectype = ?, specpower = ? WHERE id = ?", [self.state.object.name, self.state.object.short_description, self.state.object.description, self.state.object.item_type, self.state.object.extra_flags, self.state.object.wear_flags, self.state.object.value0, self.state.object.value1, self.state.object.value2, self.state.object.value3, self.state.object.weight, self.state.object.cost, self.state.object.affect_data, self.state.object.extra_descr_data, self.state.object.chpoweron, self.state.object.chpoweroff, self.state.object.chpoweruse, self.state.object.victpoweron, self.state.object.victpoweroff, self.state.object.victpoweruse, self.state.object.spectype, self.state.object.specpower, self.state.objectId], function(tx, rs) {                self.getObjects();
-            }, function(transaction, error) {
-                console.log(error.message);
-            });
-        });
-    }
+	updateObject() {
+		let self = this;
+		console.log("Trying to save");
+		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
+		db.transaction(function(tx){
+			tx.executeSql("UPDATE objects SET name = ?, short_description = ?, description = ?, item_type = ?, extra_flags = ?, wear_flags = ?, value0 = ?, value1 = ?, value2 = ?, value3 = ?, weight = ?, cost = ?, affect_data = ?, extra_descr_data = ?, chpoweron = ?, chpoweroff = ?, chpoweruse = ?, victpoweron = ?, victpoweroff = ?, victpoweruse = ?, spectype = ?, specpower = ? WHERE id = ?", [self.state.object.name, self.state.object.short_description, self.state.object.description, self.state.object.item_type, self.state.object.extra_flags, self.state.object.wear_flags, self.state.object.value0, self.state.object.value1, self.state.object.value2, self.state.object.value3, self.state.object.weight, self.state.object.cost, self.state.object.affect_data, self.state.object.extra_descr_data, self.state.object.chpoweron, self.state.object.chpoweroff, self.state.object.chpoweruse, self.state.object.victpoweron, self.state.object.victpoweroff, self.state.object.victpoweruse, self.state.object.spectype, self.state.object.specpower, self.state.objectId], function(tx, rs) {				self.getObjects();
+			}, function(transaction, error) {
+				console.log(error.message);
+			});
+		});
+	}
 	
 	addNewExtras() {
 		this.setState(
@@ -287,27 +287,27 @@ class Objects extends React.Component {
 		);
 	}
 
-    render() {
-        return (
-            <div className="wrap fade-in">
-                <Segment placeholder>
-                    <Grid columns={2} stackable textAlign='center'>
-                        <Divider vertical></Divider>
-                        <Grid.Row verticalAlign='top'>
-                            <Grid.Column>
-                                <div id="objects-list" className="fade-in">
-                                    {this.state.objects.map((object) => (
-                                        <List key={object.id} divided relaxed>
-                                            <List.Item>
-                                                <List.Content>
-                                                    <List.Header>
-                                                        <Link to={"/objects/"+object.id+"/"}>({object.id}) {object.name}</Link>
-                                                    </List.Header>
-                                                    <List.Description>{object.short_description}</List.Description>
-                                                </List.Content>
-                                            </List.Item>
-                                        </List>
-                                    ))}
+	render() {
+		return (
+			<div className="wrap fade-in">
+				<Segment placeholder>
+					<Grid columns={2} stackable textAlign='center'>
+						<Divider vertical></Divider>
+						<Grid.Row verticalAlign='top'>
+							<Grid.Column>
+								<div id="objects-list" className="fade-in">
+									{this.state.objects.map((object) => (
+										<List key={object.id} divided relaxed>
+											<List.Item>
+												<List.Content>
+													<List.Header>
+														<Link to={"/objects/"+object.id+"/"}>({object.id}) {object.name}</Link>
+													</List.Header>
+													<List.Description>{object.short_description}</List.Description>
+												</List.Content>
+											</List.Item>
+										</List>
+									))}
 									<div id="view-header-section">
 										<Button as={Link} to={'/objects/'} className="view-create-new">
 											<Icon name="plus" />
@@ -592,18 +592,18 @@ class Objects extends React.Component {
 				</Segment>
 			</div>
 		);
-    }
+	}
 }
 
 function mapStateToProps(state) {
-    return state;
+	return state;
 }
 
 function mapDispatchToProps(dispatch) {
-    return {};
+	return {};
 }
 
 export default withRouter(connect(
-    mapStateToProps,
-    mapDispatchToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(Objects));

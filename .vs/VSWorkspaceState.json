@@ -1,7 +1,6 @@
 {
   "ExpandedNodes": [
     "",
-    "\\public",
     "\\src",
     "\\src\\assets",
     "\\src\\assets\\css",
@@ -9,8 +8,9 @@
     "\\src\\constants",
     "\\src\\Containers",
     "\\src\\core",
-    "\\src\\store"
+    "\\src\\_actions",
+    "\\src\\_reducers"
   ],
-  "SelectedNode": "\\src\\Containers\\Areas.js",
+  "SelectedNode": "\\src\\core\\OLC.js",
   "PreviewInSolutionExplorer": false
 }

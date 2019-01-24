@@ -309,6 +309,28 @@ const config = {
 			{ text: "Pick-Proof", value: 32, key: 5 },
 			{ text: "No Pass Door", value: 64, key: 6 },
 		],
+	},
+	mobs: {
+	    genders: [
+                { key: '0', text: 'Unsullied', value: '0' },
+                { key: '1', text: 'Male', value: '1' },
+                { key: '2', text: 'Female', value: '2' },
+	    ],
+	    affects: [
+            { key: "0", text: "Invis", value: "2" },
+            { key: "1", text: "Detect Invis", value: "8" },
+            { key: "2", text: "Detect Hidden", value: "32" },
+            { key: "3", text: "Shadow Plane", value: "64" },
+            { key: "4", text: "Sanct", value: "128" },
+            { key: "5", text: "Faerie Fire", value: "256" },
+            { key: "6", text: "Infravision", value: "512" },
+            { key: "7", text: "Prot vs Evil", value: "8192" },
+            { key: "8", text: "Sneak", value: "32768" },
+            { key: "9", text: "Hide", value: "65536" },
+            { key: "10", text: "Flying", value: "524288" },
+            { key: "11", text: "Pass Door", value: "1048576" },
+            { key: "12", text: "Shadow Sight", value: "4194304" },
+	    ],
 	}
 }
 
