@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://palmermarc.github.io/vwolc/",
+  "homepage": "http://olc.thedeathofcaine.com",
   "dependencies": {
     "is-number": "^7.0.0",
     "react": "^16.6.3",
