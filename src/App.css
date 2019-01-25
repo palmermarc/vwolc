@@ -1,7 +1,11 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+}
 #content_bin {
-    margin-left: 175px;
     padding-top: 15px;
-    width: calc( 100vw - 205px );
+    width: calc( 100vw - 225px );
+    max-width: 1050px;
+    margin: 0 auto;
 }
 #root {
     height: 100vh;

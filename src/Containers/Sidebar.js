@@ -24,7 +24,7 @@ class Sidebar extends Component {
 			<div className="Sidebar">
 				<header className="App-header">
 					<Link to="/">
-						<Image src={Logo} alt="The Death of Cain: Online Area Builder" title="The Death of Cain: Online Area Builder" />
+						<Image className="logo" src={Logo} alt="The Death of Cain: Online Area Builder" title="The Death of Cain: Online Area Builder" />
 					</Link>
 					<nav>
 						<Menu text vertical>
