@@ -4,7 +4,7 @@ import * as actions from '../_actions/actions.areas';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Segment, Divider, Grid, Form, Message, List, Button, Icon } from 'semantic-ui-react';
+import { Card, Grid, Form, Message, List, Button, Icon } from 'semantic-ui-react';
 import config from '../constants/config';
 
 class Areas extends React.Component {
@@ -161,59 +161,53 @@ class Areas extends React.Component {
 	render() {
 		return (
 			<div className="wrap fade-in">
-				<Segment placeholder>
-					<Grid columns={2} stackable textAlign='center'>
-						<Divider vertical></Divider>
-						<Grid.Row verticalAlign='top'>
-							<Grid.Column>
-								<div id="areas-list" className="fade-in">
-									<List divided relaxed>
-										{this.state.areas.map((area) => (
-											<List.Item key={"area-"+area.id}>
-												<List.Content>
-													<Link to={"/areas/" + area.id + "/"}>
-														<List.Header>({area.id}) {area.name}</List.Header>
-													</Link>
-													<List.Description>{area.created_by}</List.Description>
-												</List.Content>
-											</List.Item>
+				<Grid celled columns={2} stackable textAlign='center'>
+					<Grid.Row verticalAlign='top'>
+						<Grid.Column className="area-list" mobile={16} tablet={8} computer={4}>
+							<div id="areas-list" className="fade-in">
+									{this.state.areas.map((area) => (
+												<Card key={area.id}>
+													<Card.Content>
+														<Card.Header><Link to={"/areas/" + area.id + "/"}> {area.name}</Link></Card.Header>
+														<Card.Meta>{area.created_by}</Card.Meta>
+													</Card.Content>
+												</Card>
+
+									))}
+								<div id="view-header-section">
+									<Button as={Link} to={'/areas/'} className="view-create-new">
+										<Icon name="plus" />
+										Create New
+									</Button>
+								</div>
+							</div>
+						</Grid.Column>
+						<Grid.Column  mobile={16} tablet={8} computer={12}>
+							<div id="mob-stats" className="fade-in">
+								{this.state.errors.length > 0  &&
+									<Message negative>
+										<Message.Header>Please fix the following errors:</Message.Header>
+										{this.state.errors.map((error) => (
+											<p>{error.message}</p>
 										))}
-									</List>
-									<div id="view-header-section">
-										<Button as={Link} to={'/areas/'} className="view-create-new">
-											<Icon name="plus" />
-											Create New
-										</Button>
-									</div>
-								</div>
-							</Grid.Column>
-							<Grid.Column>
-								<div id="mob-stats" className="fade-in">
-									{this.state.errors.length > 0  &&
-										<Message negative>
-											<Message.Header>Please fix the following errors:</Message.Header>
-											{this.state.errors.map((error) => (
-												<p>{error.message}</p>
-											))}
-										</Message>
-									}
-									<Form>
-										<Form.Group widths='equal'>
-											<Form.Input fluid name="name" label='Area Name' placeholder='Area Name Here' value={this.state.area.name} onChange={this.handleChange} />
-											<Form.Input fluid name="created_by" label='Created By' placeholder='Your Name Here' value={this.state.area.created_by} onChange={this.handleChange} />
-										</Form.Group>
-										<Form.Group widths="equal">
-											<Form.Button onClick={this.handleSubmit} color="black" content={this.state.niceName} />
-											{this.state.areaId !== 0 &&
-												 <Form.Button color="green" onClick={this.setNewActiveArea}>Open {this.state.area.name} for Building</Form.Button>
-											}
-										</Form.Group>
-									</Form>
-								</div>
-							</Grid.Column>
-						</Grid.Row>
-					</Grid>
-				</Segment>
+									</Message>
+								}
+								<Form>
+									<Form.Group widths='equal'>
+										<Form.Input fluid name="name" label='Area Name' placeholder='Area Name Here' value={this.state.area.name} onChange={this.handleChange} />
+										<Form.Input fluid name="created_by" label='Created By' placeholder='Your Name Here' value={this.state.area.created_by} onChange={this.handleChange} />
+									</Form.Group>
+									<Form.Group widths="equal">
+										<Form.Button onClick={this.handleSubmit} color="black" content={this.state.niceName} />
+										{this.state.areaId !== 0 &&
+											 <Form.Button color="green" onClick={this.setNewActiveArea}>Open {this.state.area.name} for Building</Form.Button>
+										}
+									</Form.Group>
+								</Form>
+							</div>
+						</Grid.Column>
+					</Grid.Row>
+				</Grid>
 			</div>
 		);
 	}
