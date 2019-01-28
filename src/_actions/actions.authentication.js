@@ -1,6 +1,6 @@
 import axios from 'axios';
 import createHistory from 'history/createBrowserHistory';
-import MarcoPromo from '../core/MarcoPromo';
+import MarcoPromo from '../core/OLC';
 
 const history = createHistory();
 
@@ -36,7 +36,7 @@ export function authenticateUser(username, password){
 	};
 
 	return (dispatch) => {
-		return axios.post('//marcopromo.api/users/authenticate', loginData ).then((response) => {
+		return axios.post('//api.thedeathofcaine.com/users/authenticate', loginData ).then((response) => {
 			sessionStorage.setItem('marcoPromoToken', response.data.token);
 			sessionStorage.setItem('user', response.data);
 			sessionStorage.setItem('userId', response.data.id);

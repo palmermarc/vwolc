@@ -1,29 +1,179 @@
+/*
+ * flagship.js
+ * Main MarcoPromo frontend class to manage core functionality
+ */
+
+import axios from 'axios';
 import config from '../constants/config';
+import queryString from 'query-string';
+import createHistory from 'history/createBrowserHistory';
+const history = createHistory();
 
-class OLC {
+axios.interceptors.response.use((response) => {
+    return response;
+}, function (error) {
+    // Do something with response error
+    if (error.response.status === 401) {
+        history.push('/logout/');
+    }
+    return Promise.reject(error.response);
+});
 
-    createDatabases() {
-        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
+class MarcoPromo {
 
-        db.transaction(function(tx){
-            tx.executeSql("CREATE TABLE IF NOT EXISTS areas (id INTEGER PRIMARY KEY, name TEXT, created_by TEXT)");
-        });
-
-        localStorage.setItem("database", "1.1");
+    constructor() {
+        this.config = config;
     }
 
-    createAreaDatabaseTables(areaId) {
-        var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
+    get( endpoint, query, callback, error ) {
 
-        db.transaction(function(tx){
-            tx.executeSql("CREATE TABLE IF NOT EXISTS `areas_" + areaId + "_mobs` (id INTEGER PRIMARY KEY, vnum INTEGER, name TEXT, short_description TEXT, long_description TEXT, description TEXT, act TEXT, affected_by TEXT, alignment TEXT, level INT,  exp_level INT, hitroll INT, damroll INT, ac INT, hp INT, gold INT, sex INT, area_id INT)");
-            tx.executeSql("CREATE TABLE IF NOT EXISTS `areas_" + areaId + "_objects` (id INTEGER PRIMARY KEY, vnum INT, name TEXT, short_description TEXT, description TEXT, act TEXT, item_type INTEGER, extra_flags TEXT, wear_flags TEXT, value0 INT, value1 INT, value2 INT, value3 INT, weight INT, cost INT, affect_data TEXT, extra_descr_data TEXT, chpoweron TEXT, chpoweroff TEXT, chpoweruse TEXT, victpoweron TEXT, victpoweroff TEXT, victpoweruse TEXT, spectype INT, specpower INT, affected_by TEXT);");
-            tx.executeSql("CREATE TABLE IF NOT EXISTS `areas_" + areaId + "_rooms` (id INTEGER PRIMARY KEY, name TEXT, description TEXT, room_flags TEXT, sector_type INTEGER, exits TEXT, extra_descr_data TEXT, roomtext_data TEXT, area_id INTEGER)");
-            tx.executeSql("CREATE TABLE IF NOT EXISTS `areas_" + areaId + "_resets` (id INTEGER PRIMARY KEY, command TEXT, arg1 INT, arg2 INT, arg3 INT, comment TEXT)");
+        let self = this;
+
+        let url = this.config.apiBase + endpoint + ( query !== {} ? '?' + queryString.stringify(query) : '' );
+        let config = {
+            headers: {"Authorization" : "Bearer " + sessionStorage.getItem("marcoPromoToken")},
+        };
+
+        let result = new Promise(resolve => {
+            let r = resolve;
+            axios.get(url, config).then(function (response) {
+                if (typeof callback === "function") {
+                    callback(response);
+                }
+                r(true);
+            }).catch(function(err) {
+
+                if (typeof error === "function") {
+
+                } else {
+                    self.log(
+                      "error",
+                      {
+                          "Description": "API Error",
+                          "Endpoint": endpoint,
+                          "Method": "GET",
+                          "Query": query,
+                      }
+                    );
+                    return err;
+                }
+                return err;
+            });
+            return result;
+        });
+    }
+
+
+    post( endpoint, data, callback, error ) {
+
+        let self = this;
+
+        let url = this.config.apiBase + endpoint;
+        let config = {
+            headers: {"Authorization" : "Bearer " + sessionStorage.getItem("marcoPromoToken")},
+        };
+
+        let result = new Promise(resolve => {
+            let r = resolve;
+            axios.post(url,data,config).then( function(response) {
+
+                if (typeof callback === "function") {
+                    callback(response);
+                }
+                r(true);
+            }).catch( function(err) {
+
+                if (typeof error === "function") {
+
+                } else {
+                    self.log(
+                      "error",
+                      {
+                          "Description": "API Error",
+                          "Endpoint" : endpoint,
+                          "Method" : "POST",
+                          "Data" : data,
+                          "Error" : err.response
+                      }
+                    );
+                }
+                r(false);
+            });
         });
 
+        return result;
     }
+
+    put( endpoint, data, callback, error ) {
+
+        let self = this;
+
+
+        let url = this.config.apiBase + endpoint;
+        let config = {
+            headers: {"Authorization" : "Bearer " + sessionStorage.getItem("marcoPromoToken")}
+        };
+
+        let result = new Promise(resolve => {
+            let r = resolve;
+            axios.put(url, data, config).then( function(response) {
+
+                if (typeof callback === "function") {
+                    callback(response);
+                }
+                r(true);
+            }).catch( function(err) {
+
+                if (typeof error === "function") {
+                } else {
+                    self.log(
+                      "error",
+                      {
+                          "Description": "API Error",
+                          "Endpoint" : endpoint,
+                          "Method" : "PUT",
+                          "Data" : data,
+                          "Error" : err.response
+                      }
+                    );
+                }
+                r(false);
+            });
+        });
+
+        return result;
+    }
+
+    log(action, data = '', target = null, user = null) {
+
+        //let logData = {action, data, target,  user };
+        //this.post('log/write', logData);
+    }
+
+    event(action, data = '', target = null, user = null) {
+
+        //this.log(action, data, target, user);
+        this.sendMail(action, data, target, user);
+    }
+
+    error(message, target, user) {
+        this.log("error", message, target, user);
+    }
+
+    redirect(path) {
+        //browserHistory.push(path);
+    }
+
+    decodeHtmlEntity(str) {
+        return str.replace(/&#(\d+);/g, function(match, dec) {
+            return String.fromCharCode(dec);
+        });
+    };
+
 
 }
 
-export default new OLC();
+export default new MarcoPromo();
+
+
+

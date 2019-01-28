@@ -10,4 +10,10 @@ export default {
     areas: {
         activeArea: defaultActiveArea
     },
+    user: {
+        username: "",
+        id: "",
+        token: "",
+        email: "",
+    }
 };

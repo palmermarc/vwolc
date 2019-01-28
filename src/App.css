@@ -111,10 +111,26 @@ body {
 .ui.celled.grid {
     border: 1px solid #d4d4d5;
     border-radius: 1em;
+    overflow: hidden;
 }
 .ui.celled.grid > row {
     padding: 1em;
 }
 .ui.celled.grid>.column:not(.row), .ui.celled.grid>.row>.column {
-    padding: 3em 1em;
+    padding: 3em 0;
+}
+
+#areas-list .ui.card,
+#areas-list .ui.cards>.card {
+    width: 100%;
+}
+
+.area-list {
+    background-color: #efefef;
+}
+.ui.celled.grid>.column:not(.row), .ui.celled.grid>.row>.column {
+    padding: 1em 0;
+}
+#area-form {
+    padding: 0 1em;
 }

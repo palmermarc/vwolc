@@ -4,7 +4,7 @@ import * as actions from '../_actions/actions.areas';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Segment, Divider, Grid, Form, Message, List, Button, Icon, Header, Container, Rail, Input, Dropdown } from 'semantic-ui-react';
+import { Segment, Divider, Grid, Form, Message, List, Button, Icon, Header, Container, Input, Dropdown } from 'semantic-ui-react';
 import config from '../constants/config';
 
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Redirect } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import * as actions from '../_actions/actions.authentication';
+import Logo from '../assets/images/Logo.svg';
+import { Link } from 'react-router-dom';
 import '../assets/css/Login.css';
-import logo from '../assets/images/logo.svg';
-import { Message, Form, Button, Input } from 'semantic-ui-react';
+import { Message, Form, Button, Grid, Header, Image, Segment } from 'semantic-ui-react';
 
 class Login extends React.Component {
   constructor(props) {
@@ -39,28 +39,25 @@ class Login extends React.Component {
     let user = this.props.user;
 
     return (
-      <div className="login_form">
-      <img className="App-logo" src={logo} alt="Hubbard Interactive"/>
-      {user.loginHasErrors &&
-          <Message error>{user.loginError}</Message>
-  }
+      <div className='login-form'>
+        <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as='h2' color='teal' textAlign='center'>
+                <Image src={Logo} /> Log-in to your account
+              </Header>
+              <Form size='large'>
+                <Segment stacked>
+                  <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail address' />
+                  <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' type='password' />
 
-  <Form onSubmit={this.handleSubmit}>
-      <Form.Field>
-      <Input type="text" name="username" value={this.state.username} onChange={this.handleChange} placeholder="username" />
-      </Form.Field>
-      <Form.Field>
-      <Input type="password" name="password" value={this.state.password} onChange={this.handleChange} placeholder="password" />
-      </Form.Field>
-
-      <Form.Field fluid control={Button}>Login</Form.Field>
-      </Form>
-
-    {user.isLoggedIn === true &&
-    <Redirect push to="/" />
-    }
-  </div>
-  );
+                  <Button color='teal' fluid size='large'> Login</Button>
+                </Segment>
+              </Form>
+              <Message> New to us? <Link to={'/register/'}>Sign Up</Link> </Message>
+            </Grid.Column>
+        </Grid>
+      </div>
+    );
   }
 }
 

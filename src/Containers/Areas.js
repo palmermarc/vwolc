@@ -4,7 +4,7 @@ import * as actions from '../_actions/actions.areas';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Card, Grid, Form, Message, List, Button, Icon } from 'semantic-ui-react';
+import { Card, Grid, Form, Message, Button, Icon } from 'semantic-ui-react';
 import config from '../constants/config';
 
 class Areas extends React.Component {
@@ -161,19 +161,18 @@ class Areas extends React.Component {
 	render() {
 		return (
 			<div className="wrap fade-in">
-				<Grid celled columns={2} stackable textAlign='center'>
+				<Grid stretched celled equal height columns={2} stackable textAlign='center'>
 					<Grid.Row verticalAlign='top'>
 						<Grid.Column className="area-list" mobile={16} tablet={8} computer={4}>
 							<div id="areas-list" className="fade-in">
-									{this.state.areas.map((area) => (
-												<Card key={area.id}>
-													<Card.Content>
-														<Card.Header><Link to={"/areas/" + area.id + "/"}> {area.name}</Link></Card.Header>
-														<Card.Meta>{area.created_by}</Card.Meta>
-													</Card.Content>
-												</Card>
-
-									))}
+								{this.state.areas.map((area, i) => (
+									<Card key={area.id}>
+										<Card.Content>
+											<Card.Header><Link to={"/areas/" + area.id + "/"}> {area.name}</Link></Card.Header>
+											<Card.Meta>{area.created_by}</Card.Meta>
+										</Card.Content>
+									</Card>
+								))}
 								<div id="view-header-section">
 									<Button as={Link} to={'/areas/'} className="view-create-new">
 										<Icon name="plus" />
@@ -182,8 +181,8 @@ class Areas extends React.Component {
 								</div>
 							</div>
 						</Grid.Column>
-						<Grid.Column  mobile={16} tablet={8} computer={12}>
-							<div id="mob-stats" className="fade-in">
+						<Grid.Column padded mobile={16} tablet={8} computer={12}>
+							<div id="area-form" className="fade-in">
 								{this.state.errors.length > 0  &&
 									<Message negative>
 										<Message.Header>Please fix the following errors:</Message.Header>
