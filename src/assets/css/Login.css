@@ -4,7 +4,7 @@ div#login,
 div#login .login-form {
   height: 100%;
 }
-.marcopromo-app-container > div {
+.logged-out.marcopromo-app-container > div {
   background: url('../images/bg.jpg');
   background-size: contain;
   overflow: hidden;

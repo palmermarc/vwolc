@@ -7,7 +7,7 @@ export function user(state = initialState, action) {
 	switch (action.type) {
 		case 'LOGOUT':
 			newState.isLoggedIn = false;
-			newState.userId = null;
+			newState.id = null;
 			newState.username = null;
 			newState.email = null;
 			newState.role = null;
@@ -22,11 +22,11 @@ export function user(state = initialState, action) {
 		case 'LOGIN':
 			newState.isLoggedIn = true;
 			newState.loginHasErrors = false;
-			newState.userId = user.userId;
-			newState.username = user.username;
-			newState.role = user.role;
-			newState.email = user.email;
-			newState.token = user.token;
+			newState.id = action.userId;
+			newState.username = action.username;
+			newState.role = action.role;
+			newState.email = action.email;
+			newState.token = action.token;
 			return newState;
 		default:
 			return state;

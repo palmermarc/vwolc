@@ -11,9 +11,9 @@ export default {
         activeArea: defaultActiveArea
     },
     user: {
-        username: "",
-        id: "",
-        token: "",
-        email: "",
+        username: '',
+        id: 0,
+        token: '',
+        email: ''
     }
 };

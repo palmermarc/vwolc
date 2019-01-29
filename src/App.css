@@ -127,10 +127,15 @@ body {
 
 .area-list {
     background-color: #efefef;
+    height: 100%;
 }
 .ui.celled.grid>.column:not(.row), .ui.celled.grid>.row>.column {
     padding: 1em 0;
 }
 #area-form {
+    padding: 0 1em;
+}
+
+#areas-list {
     padding: 0 1em;
 }

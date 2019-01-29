@@ -1,6 +1,5 @@
 /*
- * flagship.js
- * Main MarcoPromo frontend class to manage core functionality
+ * Main OLC frontend class to manage core functionality
  */
 
 import axios from 'axios';
@@ -19,7 +18,7 @@ axios.interceptors.response.use((response) => {
     return Promise.reject(error.response);
 });
 
-class MarcoPromo {
+class OLC {
 
     constructor() {
         this.config = config;
@@ -28,10 +27,9 @@ class MarcoPromo {
     get( endpoint, query, callback, error ) {
 
         let self = this;
-
         let url = this.config.apiBase + endpoint + ( query !== {} ? '?' + queryString.stringify(query) : '' );
         let config = {
-            headers: {"Authorization" : "Bearer " + sessionStorage.getItem("marcoPromoToken")},
+            headers: {"Authorization" : "Bearer " + localStorage.getItem("marcoPromoToken")}
         };
 
         let result = new Promise(resolve => {
@@ -63,14 +61,13 @@ class MarcoPromo {
         });
     }
 
-
     post( endpoint, data, callback, error ) {
 
         let self = this;
 
         let url = this.config.apiBase + endpoint;
         let config = {
-            headers: {"Authorization" : "Bearer " + sessionStorage.getItem("marcoPromoToken")},
+            headers: { "Authorization": "Bearer " + localStorage.getItem("marcoPromoToken") }
         };
 
         let result = new Promise(resolve => {
@@ -111,7 +108,7 @@ class MarcoPromo {
 
         let url = this.config.apiBase + endpoint;
         let config = {
-            headers: {"Authorization" : "Bearer " + sessionStorage.getItem("marcoPromoToken")}
+            headers: {"Authorization" : "Bearer " + localStorage.getItem("marcoPromoToken")}
         };
 
         let result = new Promise(resolve => {
@@ -173,7 +170,7 @@ class MarcoPromo {
 
 }
 
-export default new MarcoPromo();
+export default new OLC();
 
 
 

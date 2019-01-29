@@ -1,10 +1,5 @@
 const config = {
-	database: {
-		version: "1.0",
-		name: "tdoc_olc",
-		size: 2*1024*1024,
-		description: "Local Storage database for the Online Area Builder for The Death of Caine mud.",
-	},
+	apiBase: '//api.thedeathofcaine.com',
 	object: {
 		extra_flags : [
 			{key: 1, text: "Glow", value: 1 },
@@ -311,26 +306,26 @@ const config = {
 		],
 	},
 	mobs: {
-	    genders: [
-                { key: '0', text: 'Unsullied', value: '0' },
-                { key: '1', text: 'Male', value: '1' },
-                { key: '2', text: 'Female', value: '2' },
-	    ],
-	    affects: [
-            { key: "0", text: "Invis", value: "2" },
-            { key: "1", text: "Detect Invis", value: "8" },
-            { key: "2", text: "Detect Hidden", value: "32" },
-            { key: "3", text: "Shadow Plane", value: "64" },
-            { key: "4", text: "Sanct", value: "128" },
-            { key: "5", text: "Faerie Fire", value: "256" },
-            { key: "6", text: "Infravision", value: "512" },
-            { key: "7", text: "Prot vs Evil", value: "8192" },
-            { key: "8", text: "Sneak", value: "32768" },
-            { key: "9", text: "Hide", value: "65536" },
-            { key: "10", text: "Flying", value: "524288" },
-            { key: "11", text: "Pass Door", value: "1048576" },
-            { key: "12", text: "Shadow Sight", value: "4194304" },
-	    ],
+		genders: [
+			{ key: '0', text: 'Unsullied', value: '0' },
+			{ key: '1', text: 'Male', value: '1' },
+			{ key: '2', text: 'Female', value: '2' },
+		],
+		affects: [
+			{ key: "0", text: "Invis", value: "2" },
+			{ key: "1", text: "Detect Invis", value: "8" },
+			{ key: "2", text: "Detect Hidden", value: "32" },
+			{ key: "3", text: "Shadow Plane", value: "64" },
+			{ key: "4", text: "Sanct", value: "128" },
+			{ key: "5", text: "Faerie Fire", value: "256" },
+			{ key: "6", text: "Infravision", value: "512" },
+			{ key: "7", text: "Prot vs Evil", value: "8192" },
+			{ key: "8", text: "Sneak", value: "32768" },
+			{ key: "9", text: "Hide", value: "65536" },
+			{ key: "10", text: "Flying", value: "524288" },
+			{ key: "11", text: "Pass Door", value: "1048576" },
+			{ key: "12", text: "Shadow Sight", value: "4194304" },
+		],
 	}
 }
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import createHistory from 'history/createBrowserHistory';
-import MarcoPromo from '../core/OLC';
+import OLC from '../core/OLC';
 
 const history = createHistory();
 
@@ -31,30 +31,24 @@ export function authHasErrors(error) {
 
 export function authenticateUser(username, password){
 	let loginData = {
-		username: username,
+		email: username,
 		password: password
 	};
 
 	return (dispatch) => {
 		return axios.post('//api.thedeathofcaine.com/users/authenticate', loginData ).then((response) => {
-			sessionStorage.setItem('marcoPromoToken', response.data.token);
-			sessionStorage.setItem('user', response.data);
-			sessionStorage.setItem('userId', response.data.id);
-			sessionStorage.setItem('username', response.data.username);
-			sessionStorage.setItem('first_name', response.data.first_name);
-			sessionStorage.setItem('last_name', response.data.last_name);
-			sessionStorage.setItem('email', response.data.email);
-			sessionStorage.setItem('phone', response.data.phone);
-			dispatch(authLogin(response.data.id));
+			localStorage.setItem('marcoPromoToken', response.data.token);
+			localStorage.setItem('id', response.data.id);
+			localStorage.setItem('username', response.data.username);
+			localStorage.setItem('email', response.data.email);
+			dispatch(authLogin(response.data));
+			history.push('/areas/');
 		}).catch((e) => {
-			console.log(e);
-			let response = JSON.parse(e.response.request.response);
+			//let response = JSON.parse(e.response.request.response);
 			dispatch(authHasErrors("Error: Wrong Username/Password"));
 		});
 	}
 }
-
-
 
 export function userLogOut() {
 	return (dispatch) => {
@@ -63,20 +57,15 @@ export function userLogOut() {
 }
 
 export function checkToken() {
-
 	return function (dispatch) {
-
-		let url = 'users/validate';
-
-		MarcoPromo.get(url, {}, function (response) {
+		OLC.get('/users/validate', {}, function (response) {
 			if( response.data.status === 'success' ) {
-				sessionStorage.setItem('userId', response.data.id);
-				sessionStorage.setItem('username', response.data.username);
-				sessionStorage.setItem('first_name', response.data.first_name);
-				sessionStorage.setItem('last_name', response.data.last_name);
-				sessionStorage.setItem('email', response.data.email);
-				sessionStorage.setItem('phone', response.data.phone);
-				dispatch(authLogin(response.data.id));
+				console.log("We should be logged in now...");
+				localStorage.setItem('id', response.data.id);
+				localStorage.setItem('username', response.data.username);
+				localStorage.setItem('email', response.data.email);
+				localStorage.setItem('role', response.data.role);
+				dispatch(authLogin(response.data));
 			} else {
 				dispatch(authHasErrors(response.data.message));
 				dispatch(userLogOut());

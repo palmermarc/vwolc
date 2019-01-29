@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom'
 import { connect } from 'react-redux';
 import createBrowserHistory from 'history/createBrowserHistory';
-import * as actions from "./_actions/index";
+import * as actions from "./_actions/actions.authentication";
 import {bindActionCreators} from "redux";
 import './App.css';
 import Sidebar from './Containers/Sidebar';
@@ -18,10 +18,9 @@ const history = createBrowserHistory();
 class App extends Component {
 
   componentWillMount() {
-    let token = sessionStorage.getItem("marcoPromoToken");
+    let token = localStorage.getItem("marcoPromoToken");
 
     if ( token !== null ) {
-      console.log('We need to check the token...');
       this.props.actions.checkToken(token);
     } else {
       history.push('/login/');
@@ -29,19 +28,20 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props.user);
+    let newClassName = (this.props.user.id !== 0) ? "logged-in" : "logged-out";
+
     return (
-      <div className={"marcopromo-app-container"}>
+      <div className={newClassName + " marcopromo-app-container"}>
         <Router history={history}>
           <div>
-            {this.props.user.id === "" &&
+            {this.props.user.id === 0 &&
               <div id="login">
                 <Route exact path="/login" niceName="" component={Login} />
               </div>
             }
 
-            {this.props.user.id !== "" &&
-              <div id="" className="content">
+            {this.props.user.id > 0 &&
+              <div className="content">
                 <Sidebar></Sidebar>
                 <div id="content_bin">
                     <Route exact path="/" niceName="Welcome" component={Dashboard} />

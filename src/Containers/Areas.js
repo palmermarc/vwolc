@@ -6,6 +6,7 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Card, Grid, Form, Message, Button, Icon } from 'semantic-ui-react';
 import config from '../constants/config';
+import OLC from "../core/OLC";
 
 class Areas extends React.Component {
 	constructor(props, context) {
@@ -18,41 +19,24 @@ class Areas extends React.Component {
 			areaId: 0,
 			areas: [{
 				name: "My First Area",
-				created_by: "Your Name Here",
+				starting_vnum: "",
 				id: 0
 			}],
 			area: { 
-				name: "", 
-				created_by: "", 
+				name: "",
+				starting_vnum: "",
 				id: 0
 			}
 		}
 	}
 
 	getAreas() {
-		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
 		let self = this;
-		let savedAreas = [];
-		db.transaction(function(tx){
-			tx.executeSql("SELECT * FROM areas LIMIT 10000", [], function(tx, rs) {
-				if( rs.rows.length >= 1 ) {
-					for( var i=0; i<rs.rows.length; i++ ) {
-						savedAreas.push({
-							id: rs.rows[i].id,
-							name: rs.rows[i].name,
-							created_by: rs.rows[i].created_by
-						});
-					}
-				} else {
-					savedAreas = [{
-						id: 0,
-						name: "My First Area",
-						created_by: "Your Name Here"
-					}]
-				}
-				self.setState({areas: savedAreas});
-			})
-		});		
+		OLC.get('/areas', { user_id : this.props.user.id }, function (response) {
+			if( response.data.status === 'success' ) {
+				self.setState({ areas: response.data.areas });
+			}
+		});
 	}
 
 	componentDidMount(nextProps) {
@@ -79,23 +63,7 @@ class Areas extends React.Component {
 
 	getArea( areaId ) {
 		let self = this;
-		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-		db.transaction(function(tx){
-			
-			tx.executeSql("SELECT * FROM areas WHERE id = '" + areaId + "'", [], function(tx, rs) {
-				if( rs.rows.length ) {
-					self.setState({ 
-						area: {
-							id: rs.rows[0].id,
-							name: rs.rows[0].name,
-							created_by: rs.rows[0].created_by
-						}
-					});
-				}
-			}, function(error) {
-				console.log(error);
-			});
-		});
+
 	}
 
 	handleChange(e) {
@@ -161,15 +129,15 @@ class Areas extends React.Component {
 	render() {
 		return (
 			<div className="wrap fade-in">
-				<Grid stretched celled equal height columns={2} stackable textAlign='center'>
-					<Grid.Row verticalAlign='top'>
+				<Grid celled columns={2} textAlign='center'>
+					<Grid.Row stretched verticalAlign='top'>
 						<Grid.Column className="area-list" mobile={16} tablet={8} computer={4}>
 							<div id="areas-list" className="fade-in">
 								{this.state.areas.map((area, i) => (
 									<Card key={area.id}>
 										<Card.Content>
 											<Card.Header><Link to={"/areas/" + area.id + "/"}> {area.name}</Link></Card.Header>
-											<Card.Meta>{area.created_by}</Card.Meta>
+											<Card.Meta>{this.props.user.username}</Card.Meta>
 										</Card.Content>
 									</Card>
 								))}
@@ -194,7 +162,7 @@ class Areas extends React.Component {
 								<Form>
 									<Form.Group widths='equal'>
 										<Form.Input fluid name="name" label='Area Name' placeholder='Area Name Here' value={this.state.area.name} onChange={this.handleChange} />
-										<Form.Input fluid name="created_by" label='Created By' placeholder='Your Name Here' value={this.state.area.created_by} onChange={this.handleChange} />
+										<Form.Input fluid name="starting_vnum" label='Starting VNUM' value={this.state.area.starting_vnum} onChange={this.handleChange} />
 									</Form.Group>
 									<Form.Group widths="equal">
 										<Form.Button onClick={this.handleSubmit} color="black" content={this.state.niceName} />
