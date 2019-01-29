@@ -3,43 +3,51 @@ header {
 }
 .App-header {
     align-items: center;
-    background-color: #efefef;
+    background-color: #fff;
     font-size: calc(10px + 2vmin);
     justify-content: center;
-    min-height: 100vh;
-    width: 150px;
+    height: 83px;
+    width: 100%;
     border-right: 1px solid #dddbdb;
 }
-    .App-header > a {
-        background-color: #262626;
-        box-shadow: -1px 2px 14px 0px #262626;
-        color: #fff;
-        display: block;
-        margin: 0 0 1em 0;
-        padding: 8px;
-        text-decoration: none;
-    }
+.App-header > a {
+    background-color: #262626;
+    box-shadow: -1px 2px 14px 0px #262626;
+    height: 83px;
+    margin: 0;
+    padding: 10px 8px;
+    text-decoration: none;
+    width: 200px;
+    display: block;
+    float: left;
+}
 
-    .App-header a {
-        color: #dddbdb;
-        display: block;
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 600;
-        margin: 0 0 1em 0;
-        text-decoration: none;
-    }
+.App-header nav a {
+    color: #dddbdb;
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+}
 
-    .App-header nav {
-        max-width: 100%;
-    }
-
-        .App-header nav .ui.vertical.text.menu .item {
-            color: #262626;
-            font-size: 20px;
-            margin-bottom: 1em;
-            margin-left: 25px;
-        }
-
-.Sidebar {
-    position: absolute;
+.App-header nav {
+    display: inline-block;
+    padding-left: 3em;
+    font-size: 24px;
+}
+.App-header img.ui.image {
+    display: inline;
+}
+.App-header nav .ui.secondary.menu a.item {
+    color: #262626;
+    font-size: 20px;
+    margin: 0;
+    border-radius: 0;
+}
+.App-header nav .ui.secondary.menu a.item:hover {
+    background-color: #262626;
+    color: #fff;
+}
+.App-header nav .ui.secondary.menu {
+    height: 83px
 }

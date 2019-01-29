@@ -131,7 +131,7 @@ class Areas extends React.Component {
 			<div className="wrap fade-in">
 				<Grid celled columns={2} textAlign='center'>
 					<Grid.Row stretched verticalAlign='top'>
-						<Grid.Column className="area-list" mobile={16} tablet={8} computer={4}>
+						<Grid.Column className="area-list" mobile={16} tablet={8} computer={3}>
 							<div id="areas-list" className="fade-in">
 								{this.state.areas.map((area, i) => (
 									<Card key={area.id}>
@@ -142,14 +142,14 @@ class Areas extends React.Component {
 									</Card>
 								))}
 								<div id="view-header-section">
-									<Button as={Link} to={'/areas/'} className="view-create-new">
+									<Button color='orange' as={Link} to={'/areas/'} className="view-create-new">
 										<Icon name="plus" />
 										Create New
 									</Button>
 								</div>
 							</div>
 						</Grid.Column>
-						<Grid.Column padded mobile={16} tablet={8} computer={12}>
+						<Grid.Column padded mobile={16} tablet={8} computer={13}>
 							<div id="area-form" className="fade-in">
 								{this.state.errors.length > 0  &&
 									<Message negative>

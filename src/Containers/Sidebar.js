@@ -27,15 +27,11 @@ class Sidebar extends Component {
 						<Image className="logo" src={Logo} alt="The Death of Cain: Online Area Builder" title="The Death of Cain: Online Area Builder" />
 					</Link>
 					<nav>
-						<Menu text vertical>
-							<Menu.Item as={Link} to='/areas/'>Areas</Menu.Item>
-							{this.props.areas.activeArea !== 0 && 
-							<span>
-							<Menu.Item as={Link} to='/rooms/'>Rooms</Menu.Item>
-							<Menu.Item as={Link} to='/mobs/'>Mobs</Menu.Item>
-							<Menu.Item as={Link} to='/objects/'>Objects</Menu.Item>
-							</span>
-							}
+						<Menu secondary>
+							<Menu.Item name="areas" as={Link} to='/areas/'>Areas</Menu.Item>
+							<Menu.Item name="rooms" as={Link} to='/rooms/'>Rooms</Menu.Item>
+							<Menu.Item name="mobs" as={Link} to='/mobs/'>Mobs</Menu.Item>
+							<Menu.Item name="objects" as={Link} to='/objects/'>Objects</Menu.Item>
 						</Menu>
 					</nav>
 				</header>
