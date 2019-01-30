@@ -1,5 +1,5 @@
 const config = {
-	apiBase: '//api.thedeathofcaine.local',
+	apiBase: '//api.thedeathofcaine.com',
 	object: {
 		extra_flags : [
 			{key: 1, text: "Glow", value: 1 },
