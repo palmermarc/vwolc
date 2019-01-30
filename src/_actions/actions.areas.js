@@ -12,9 +12,9 @@ function setNewActiveArea(areaId) {
 
 export function setActiveArea(areaId) {
 	return (dispatch) => {
-		OLC.createAreaDatabaseTables(areaId);
 		dispatch( setNewActiveArea( areaId ) );
 		localStorage.setItem('activeArea', areaId);
 		history.push('/rooms/');
 	}
 }
+

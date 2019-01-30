@@ -4,8 +4,7 @@ import * as actions from '../_actions/actions.areas';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Card, Grid, Form, Message, Button, Icon } from 'semantic-ui-react';
-import config from '../constants/config';
+import {Card, Grid, Form, Button, Icon, Portal, Segment, Header} from 'semantic-ui-react';
 import OLC from "../core/OLC";
 
 class Areas extends React.Component {
@@ -14,7 +13,7 @@ class Areas extends React.Component {
 		this.handleChange = this.handleChange.bind(this);
 		this.getAreas = this.getAreas.bind(this);
 		this.state = {
-			errors: [],
+			hasErrors: false,
 			niceName: "Create Area",
 			areaId: 0,
 			areas: [{
@@ -32,9 +31,9 @@ class Areas extends React.Component {
 
 	getAreas() {
 		let self = this;
-		OLC.get('/areas', { user_id : this.props.user.id }, function (response) {
-			if( response.data.status === 'success' ) {
-				self.setState({ areas: response.data.areas });
+		OLC.get('/areas', [], function (response) {
+			if( response.data.success === true ) {
+				self.setState({ areas: response.data.results });
 			}
 		});
 	}
@@ -50,7 +49,9 @@ class Areas extends React.Component {
 		document.title = this.state.niceName;
 	}
 
+
 	componentWillReceiveProps () {
+		console.log(this.props.match.params.areaId);
 		this.getAreas();
 
 		if( typeof this.props.match.params.areaId !== "undefined" ) {
@@ -63,7 +64,13 @@ class Areas extends React.Component {
 
 	getArea( areaId ) {
 		let self = this;
-
+		OLC.get("/areas/" + areaId, [], function(response) {
+			if( response.data.success === true ) {
+				self.setState({ area: response.data.results });
+			} else {
+				self.setState({ hasErrors: true, message: response.data.message });
+			}
+		});
 	}
 
 	handleChange(e) {
@@ -80,16 +87,18 @@ class Areas extends React.Component {
 	}
 
 	handleSubmit = () => {
+		this.setState({ hasErrors: false, message: "" });
+
 		if( this.state.area.name === "") {
-			this.setState({ errors: [{field: "name", message: "You must provide an area name."}] });
+			this.setState({ hasErrors: true, message: "You must provide an area name." });
 		}
 
 		if( this.state.area.created_by === "") {
-			this.setState({ errors: [{field: "created_by", message: "You need to provide a name so we can credit the right person."}] });
+			this.setState({ hasErrors: true, message: "You need to provide a name so we can credit the right person." });
 		}
 
 		// Don't save anything if there are errors
-		if( this.state.errors.length > 0 )
+		if( this.state.hasErrors === true )
 			return false;
 
 		if( this.state.areaId === 0 ) {
@@ -101,26 +110,23 @@ class Areas extends React.Component {
 
 	createArea() {
 		let self = this;
-		var db = openDatabase( config.database.name, config.database.version, config.database.description, config.database.size);
-
-		db.transaction(function (tx) {
-			tx.executeSql("INSERT INTO areas (name, created_by) VALUES (?, ?)", [self.state.area.name, self.state.area.created_by], function(tx, res){
-				self.props.history.push("/areas/"+res.insertId+"/");
-			}, function(ts, error) {
-				console.log(error);
-			});
+		OLC.post("/areas", { name: this.state.area.name, starting_vnum: this.state.area.starting_vnum }, function(response) {
+			if( response.data.success === true ) {
+				self.setState({ areas: response.data.results, message: response.data.message });
+			} else {
+				self.setState({ hasErrors: true, message: response.data.message });
+			}
 		});
 	}
 
 	updateArea() {
 		let self = this;
-		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-		db.transaction(function (tx) {
-			tx.executeSql("UPDATE areas SET name = ?, created_by = ? WHERE rowid = ?", [self.state.area.name, self.state.area.created_by, self.state.areaId], function(tx, res){
-				self.getAreas();
-			}, function(ts, error) {
-				console.log(error);
-			});
+		OLC.put("/areas/" + this.state.areaId, { name: this.state.area.name, starting_vnum: this.state.area.starting_vnum }, function(response) {
+			if( response.data.success === true ) {
+				self.setState({ areas: response.data.results, message: response.data.message });
+			} else {
+				self.setState({ hasErrors: true, message: response.data.message });
+			}
 		});
 	}
 	
@@ -134,31 +140,22 @@ class Areas extends React.Component {
 						<Grid.Column className="area-list" mobile={16} tablet={8} computer={3}>
 							<div id="areas-list" className="fade-in">
 								{this.state.areas.map((area, i) => (
-									<Card key={area.id}>
+									<Card key={"area-"+area.ID}>
 										<Card.Content>
-											<Card.Header><Link to={"/areas/" + area.id + "/"}> {area.name}</Link></Card.Header>
+											<Card.Header><Link to={"/areas/" + area.ID + "/"}> {area.name}</Link></Card.Header>
 											<Card.Meta>{this.props.user.username}</Card.Meta>
 										</Card.Content>
 									</Card>
 								))}
 								<div id="view-header-section">
 									<Button color='orange' as={Link} to={'/areas/'} className="view-create-new">
-										<Icon name="plus" />
-										Create New
+										<Icon name="plus" /> Create New
 									</Button>
 								</div>
 							</div>
 						</Grid.Column>
-						<Grid.Column padded mobile={16} tablet={8} computer={13}>
+						<Grid.Column mobile={16} tablet={8} computer={13}>
 							<div id="area-form" className="fade-in">
-								{this.state.errors.length > 0  &&
-									<Message negative>
-										<Message.Header>Please fix the following errors:</Message.Header>
-										{this.state.errors.map((error) => (
-											<p>{error.message}</p>
-										))}
-									</Message>
-								}
 								<Form>
 									<Form.Group widths='equal'>
 										<Form.Input fluid name="name" label='Area Name' placeholder='Area Name Here' value={this.state.area.name} onChange={this.handleChange} />
@@ -175,6 +172,13 @@ class Areas extends React.Component {
 						</Grid.Column>
 					</Grid.Row>
 				</Grid>
+				{this.state.hasErrors === true &&
+					<Portal open={true}>
+						<Segment style={{ backgroundColor: 'red', right: '5%', bottom: '5%', position: 'fixed', zIndex: 1000 }}>
+							<Header style={{ color: '#fff' }}>{this.state.message}</Header>
+						</Segment>
+					</Portal>
+				}
 			</div>
 		);
 	}

@@ -45,8 +45,8 @@ class App extends Component {
                 <Sidebar></Sidebar>
                 <div id="content_bin">
                     <Route exact path="/" niceName="Welcome" component={Dashboard} />
-                    <Route exact path="/areas/" niceName="Areas" component={Areas} />
                     <Route exact path="/areas/:areaId/" niceName="Areas" component={Areas} />
+                    <Route exact path="/areas/" niceName="Areas" component={Areas} />
                     <Route exact path="/mobs/" niceName="Mobs" component={Mobs} />
                     <Route exact path="/mobs/:mobId/" niceName="Edit Mob" component={Mobs} />
                     <Route exact path="/objects/" nameName="Create Object" component={Objects} />
