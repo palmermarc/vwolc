@@ -4,7 +4,21 @@ import * as actions from '../_actions/actions.areas';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Segment, Divider, Grid, Form, Message, List, Button, Icon, Header, Container, Input, Dropdown } from 'semantic-ui-react';
+import {
+	Segment,
+	Divider,
+	Grid,
+	Form,
+	Message,
+	List,
+	Button,
+	Icon,
+	Header,
+	Container,
+	Input,
+	Dropdown,
+	Portal
+} from 'semantic-ui-react';
 import config from '../constants/config';
 import OLC from "../core/OLC";
 
@@ -13,11 +27,13 @@ class Areas extends React.Component {
 		super(props, context);
 		
 		this.state = {
-			errors: [],
 			niceName: "Create Room",
 			roomId: 0,
 			rooms: [],
-			room: { 
+			hasErrors: false,
+			success: false,
+			message: "",
+			room: {
 				id: 0,
 				name: "",
 				description: "",
@@ -50,7 +66,7 @@ class Areas extends React.Component {
 		let Rooms = [];
 		let exitRooms = [];
 
-		OLC.get("/rooms/", {area_id : this.state.areaId}, function(response) {
+		OLC.get("/rooms", {area_id : this.state.areaId}, function(response) {
 			console.log(response);
 			if( response.data.success === true ) {
 
@@ -65,7 +81,7 @@ class Areas extends React.Component {
 					roomtext_data: response.data.results.roomtext_data
 				});
 
-				self.setState({ rooms: Rooms });
+				self.setState({ rooms: response.data.results });
 			} else {
 				self.setState({ hasErrors: true, message: response.data.message });
 			}
@@ -120,9 +136,7 @@ class Areas extends React.Component {
 	handleSubmit = () => {
 		// Add in the form handling here
 
-		// Don't save anything if there are errors
-		if( this.state.errors.length > 0 )
-			return false;
+
 
 		if( this.state.roomId === 0 )
 			this.createRoom();
@@ -132,37 +146,55 @@ class Areas extends React.Component {
 
 	createRoom() {
 		let self = this;
-		var db = openDatabase( config.database.name, config.database.version, config.database.description, config.database.size);
+		let room = {
+			name: this.state.room.name,
+			description: this.state.room.description,
+			room_flags: this.state.room.room_flags,
+			sector_type: this.state.room.sector_type,
+			exits: this.state.room.exits,
+			extra_descr_data: this.state.room.extra_descr_data,
+			roomtext_data: this.state.room.roomtext_data,
+			area_id: this.props.areas.activeArea,
+		};
 
-		db.transaction(function (tx) {
-			tx.executeSql(
-				"INSERT INTO rooms () VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-				[self.state.room.name, self.state.room.description, JSON.stringify(self.state.room.room_flags), self.state.room.sector_type, JSON.stringify(self.state.room.exits), JSON.stringify(self.state.room.extra_descr_data), JSON.stringify(self.state.room.roomtext_data), self.props.areas.activeArea], 
-				function(tx, res){
-					console.log(tx);
-					console.log(res);
-					self.props.history.push("/rooms/"+res.insertId+"/");
-				}, function(ts, error) {
-					console.log(error);
-				}
-			);
+		OLC.post("/rooms", room, function (response) {
+			console.log(response);
+			if( response.data.success === true ) {
+				self.setState({rooms: response.data.results, success: true, message: response.data.message});
+
+				setTimeout(function() {
+					self.setState({success: false, message: ""});
+				}, 5000);
+			} else {
+
+			}
 		});
 	}
 	
 	updateRoom() {
 		let self = this;
-		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-		
-		db.transaction(function (tx) {
-			tx.executeSql(
-				"UPDATE rooms SET name = ?, description = ?, room_flags = ?, sector_type = ?, exits = ?, extra_descr_data = ?, roomtext_data = ? WHERE id = ?", 
-				[self.state.room.name, self.state.room.description, JSON.stringify(self.state.room.room_flags), self.state.room.sector_type, JSON.stringify(self.state.room.exits), JSON.stringify(self.state.room.extra_descr_data), JSON.stringify(self.state.room.roomtext_data), self.state.roomId], 
-				function(tx, res){
-					this.getRooms();
-				}, function(ts, error) {
-					console.log(error);
-				}
-			);
+		let room = {
+			name: this.state.room.name,
+			description: this.state.room.description,
+			room_flags: this.state.room.room_flags,
+			sector_type: this.state.room.sector_type,
+			exits: this.state.room.exits,
+			extra_descr_data: this.state.room.extra_descr_data,
+			roomtext_data: this.state.room.roomtext_data,
+			area_id: this.props.areas.activeArea,
+		};
+
+		OLC.put("/rooms/" + this.state.roomId, room, function (response) {
+			console.log(response);
+			if( response.data.success === true ) {
+				self.setState({rooms: response.data.results, success: true, message: response.data.message});
+
+				setTimeout(function() {
+					self.setState({success: false, message: ""});
+				}, 5000);
+			} else {
+
+			}
 		});
 	}
 	
@@ -231,9 +263,9 @@ class Areas extends React.Component {
 								<div id="areas-list" className="fade-in">
 									<List divided relaxed>
 										{this.state.rooms.map((room) => (
-											<List.Item key={"room-"+room.id}>
+											<List.Item key={"room-"+room.ID}>
 												<List.Content>
-													<Link to={"/rooms/" + room.id + "/"}>
+													<Link to={"/rooms/" + room.ID + "/"}>
 														<List.Header>({room.id}) {room.name}</List.Header>
 													</Link>
 													<List.Description>{room.created_by}</List.Description>
@@ -251,14 +283,6 @@ class Areas extends React.Component {
 							</Grid.Column>
 							<Grid.Column>
 								<div id="mob-stats" className="fade-in">
-									{this.state.errors.length > 0  &&
-										<Message negative>
-											<Message.Header>Please fix the following errors:</Message.Header>
-											{this.state.errors.map((error) => (
-												<p>{error.message}</p>
-											))}
-										</Message>
-									}
 									<Form>
 										<Form.Input fluid name="name" value={this.state.room.name} label="Room Name" placeholder="Room Name Here" onChange={this.handleChange} />
 										<Form.TextArea name="description" label='Look' placeholder='The mob looks back at you!' value={this.state.room.description} onChange={this.handleChange} />
@@ -319,6 +343,20 @@ class Areas extends React.Component {
 						</Grid.Row>
 					</Grid>
 				</Segment>
+				{this.state.hasErrors === true &&
+					<Portal open={true}>
+						<Segment style={{ backgroundColor: 'red', right: '5%', bottom: '5%', position: 'fixed', zIndex: 1000 }}>
+							<Header style={{ color: '#fff' }}>{this.state.message}</Header>
+						</Segment>
+					</Portal>
+				}
+				{this.state.success === true &&
+					<Portal open={true}>
+						<Segment style={{ backgroundColor: 'green', right: '5%', bottom: '5%', position: 'fixed', zIndex: 1000 }}>
+							<Header style={{ color: '#fff' }}>{this.state.message}</Header>
+						</Segment>
+					</Portal>
+				}
 			</div>
 		);
 	}
