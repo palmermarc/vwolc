@@ -6,7 +6,7 @@ import { withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Segment, Divider, Grid, Form, Message, List, Button, Icon, Header, Container, Input, Dropdown } from 'semantic-ui-react';
 import config from '../constants/config';
-
+import OLC from "../core/OLC";
 
 class Areas extends React.Component {
 	constructor(props, context) {
@@ -46,35 +46,30 @@ class Areas extends React.Component {
 	}
 
 	getRooms() {
-		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
 		let self = this;
 		let Rooms = [];
 		let exitRooms = [];
-		db.transaction(function(tx){
-			tx.executeSql("SELECT * FROM rooms LIMIT 10000", [], function(tx, rs) {
-				if( rs.rows.length >= 1 ) {
-					for( var i=0; i<rs.rows.length; i++ ) {
-						Rooms.push({
-							id: rs.rows[i].id,
-							name: rs.rows[i].name,
-							description: rs.rows[i].description,
-							room_flags: rs.rows[i].room_flags,
-							sector_type: rs.rows[i].sector_type,
-							exits: rs.rows[i].exits,
-							extra_descr_data: rs.rows[i].extra_descr_data,
-							roomtext_data: rs.rows[i].roomtext_data
-						});
-						
-						exitRooms.push({
-							key: i,
-							text: rs.rows[i].name,
-							value: rs.rows[i].id
-						});
-					}
-					self.setState({rooms: Rooms});
-				}
-			})
-		});		
+
+		OLC.get("/rooms/", {area_id : this.state.areaId}, function(response) {
+			console.log(response);
+			if( response.data.success === true ) {
+
+				Rooms.push({
+					id: response.data.results.id,
+					name: response.data.results.name,
+					description: response.data.results.description,
+					room_flags: response.data.results.room_flags,
+					sector_type: response.data.results.sector_type,
+					exits: response.data.results.exits,
+					extra_descr_data: response.data.results.extra_descr_data,
+					roomtext_data: response.data.results.roomtext_data
+				});
+
+				self.setState({ rooms: Rooms });
+			} else {
+				self.setState({ hasErrors: true, message: response.data.message });
+			}
+		});
 	}
 
 	componentDidMount(nextProps) {
@@ -101,27 +96,13 @@ class Areas extends React.Component {
 
 	getRoom( roomId ) {
 		let self = this;
-		var db = openDatabase(config.database.name, config.database.version, config.database.description, config.database.size);
-		db.transaction(function(tx){
-			
-			tx.executeSql("SELECT * FROM rooms WHERE id = '" + roomId + "'", [], function(tx, rs) {
-				if( rs.rows.length ) {
-					self.setState({ 
-						room: {
-							id: rs.rows[0].id,
-							name: rs.rows[0].name,
-							description: rs.rows[0].description,
-							room_flags: JSON.parse(rs.rows[0].room_flags),
-							sector_type: rs.rows[0].sector_type,
-							exits: JSON.parse(rs.rows[0].exits),
-							extra_descr_data: JSON.parse(rs.rows[0].extra_descr_data),
-							roomtext_data: JSON.parse(rs.rows[0].roomtext_data)
-						}
-					});
-				}
-			}, function(error) {
-				console.log(error);
-			});
+		OLC.get("/rooms/" + roomId, {area_id : this.state.areaId}, function(response) {
+			console.log(response);
+			if( response.data.success === true ) {
+				self.setState({ room: response.data.results });
+			} else {
+				self.setState({ hasErrors: true, message: response.data.message });
+			}
 		});
 	}
 
@@ -155,7 +136,7 @@ class Areas extends React.Component {
 
 		db.transaction(function (tx) {
 			tx.executeSql(
-				"INSERT INTO rooms (name, description, room_flags, sector_type, exits, extra_descr_data, roomtext_data, area_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
+				"INSERT INTO rooms () VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
 				[self.state.room.name, self.state.room.description, JSON.stringify(self.state.room.room_flags), self.state.room.sector_type, JSON.stringify(self.state.room.exits), JSON.stringify(self.state.room.extra_descr_data), JSON.stringify(self.state.room.roomtext_data), self.props.areas.activeArea], 
 				function(tx, res){
 					console.log(tx);
